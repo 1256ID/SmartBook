@@ -7,17 +7,28 @@ using System.Threading.Tasks;
 namespace SmartBook.Models;
  class Loan
 {
-    private int Id;   
-    private Guid ISBN;
-    private Guid UserId;
-    private DateTime LoanDate;
-    private DateTime DueDate;
-    private DateTime ReturnDate;
+    private Guid _id;   
+    private Guid _isbn;
+    private Guid _userId;
+    private DateTime _loanDate;
+    private DateTime _dueDate;
+    private DateTime _returnDate;
 
-    public Loan(int id, Guid iSBN, Guid userId)
+    public DateTime LoanDate
     {
-        Id = id;
-        ISBN = iSBN;
-        UserId = userId;
+        get => _loanDate;
+        private set => _loanDate = value;
+    }
+
+    public DateTime DueDate
+    {
+        get => _dueDate;
+        private set => _dueDate = value;
+    }
+
+    public DateTime ReturnDate
+    {
+        get => _returnDate;
+        private set => _returnDate = value;
     }
 }

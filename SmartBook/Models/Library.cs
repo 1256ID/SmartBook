@@ -8,10 +8,34 @@ namespace SmartBook.Models
 {
     class Library
     {
-        private string Name = "Ivans Bibliotek";
-        private List<Book> books = [];
-        private List<LibraryCard> cards = [];
-        private List<Loan> loans = [];
-        private DateTime LastUpdated;
+        public string Name { get; set; } = "Ivans Bibliotek";
+        private List<Book> _books = [];
+        private List<LibraryCard> _cards = [];
+        private List<Loan> _loans = [];
+        private DateTime _lastUpdated;
+
+        public List<Book> Books
+        {
+            get => _books;
+            private set => _books = value;
+        }
+
+        public List<LibraryCard> Cards
+        {
+            get => _cards;
+            private set => _cards = value;
+        }
+
+        public List<Loan> Loans
+        {
+            get => _loans;
+            private set => _loans = value;
+        }
+
+        public DateTime LastUpdated
+        {
+            get => _lastUpdated; 
+            private set => _lastUpdated = value;
+        }
     }
 }

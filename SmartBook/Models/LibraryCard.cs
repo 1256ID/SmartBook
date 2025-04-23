@@ -6,13 +6,26 @@ using System.Threading.Tasks;
 
 namespace SmartBook.Models
 {
-    internal class LibraryCard
+    class LibraryCard
     {
-        private Guid Id;
-        private Guid UserId;
-        private Guid CardNumber;
-        private DateTime IssuedDate;
-        private DateTime ExpiryDate;
-        private bool IsActive;      
+        private Guid _id;
+        private Guid _userId;
+        private Guid _cardNumber;
+        private DateTime _issuedDate;
+        private DateTime _expiryDate;
+        private bool IsActive => IsActive == DateTime.Now >= _issuedDate && DateTime.Now <= _expiryDate;
+       
+        public DateTime IssuedDate
+        {
+            get => _issuedDate;
+            private set => _issuedDate = value;
+        }
+
+        public DateTime ExpiryDate
+        {
+            get => _expiryDate;
+            private set => _expiryDate = value;
+        }
+
     }
 }

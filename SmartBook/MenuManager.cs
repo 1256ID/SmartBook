@@ -27,25 +27,24 @@ namespace SmartBook
                         ], index
                     );
 
-
                 switch (index)
                 {
 
                     case 0:
 
-                        break;
+                    break;
 
                     case 1:
 
-                        break;
+                    break;
 
                     case 2:
 
-                        break;
+                    break;
 
                     case 3:
                         managingBooks = false;
-                        break;
+                    break;
 
                 }
 

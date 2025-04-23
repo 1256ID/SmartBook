@@ -9,8 +9,20 @@ namespace SmartBook.Models;
 
 class Book
 {
-    private Guid Id;
-    private Guid BookInfoId;
-    private string Status;
-    private string AddedDate;
+    private Guid _id;
+    private Guid _bookInfoId;
+    private string _status;
+    private string _addedDate;
+
+    public string Status
+    {
+        get => _status; 
+        private set => _status = value;
+    }
+
+    public string AddedDate
+    {
+        get => _addedDate;
+        private set => _addedDate = value;
+    }
 }
