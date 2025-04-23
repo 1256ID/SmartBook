@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace SmartBook.Models
 {
-    class User
+    internal class BookInfo
     {
         private Guid Id;
-        private Guid LibraryCardId;
-        private string Name;
-        private string Email;
+        private Guid ISBN;
+        private string Title;
+        private string Author;
+        private string Genre;
     }
 }
