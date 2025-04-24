@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SmartBook.Handler
+namespace SmartBook.Service;
+
+public class LibraryService
 {
-    public class LoanHandler
-    {
-    }
 }

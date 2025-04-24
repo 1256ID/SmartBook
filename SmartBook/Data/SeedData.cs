@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SmartBook.Handler
+namespace SmartBook.Data
 {
-    public class LoanHandler
+    public class SeedData
     {
+
     }
 }

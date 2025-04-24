@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SmartBook
+namespace SmartBook.Service
 {
-    internal class Utils
+    public class UserService
     {
     }
 }

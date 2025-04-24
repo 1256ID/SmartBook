@@ -1,6 +1,8 @@
-﻿namespace SmartBook;
+﻿using SmartBook.Utilities;
 
-class App
+namespace SmartBook;
+
+public class App
 {
     static void Main()
     {
@@ -12,17 +14,15 @@ class App
         bool runningApp = true;
         int index = 0;
 
-
         do
         {
             index = Menu.Display
                 (
                     "Ivans Bibliotek",
-                    [
-
+                    [                                               
+                        "Hantera användare",                     
                         "Hantera böcker",
                         "Hantera lånekort",
-                        "Hantera användare",
                         "Avsluta programmet"
 
                     ], index

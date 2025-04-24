@@ -7,16 +7,27 @@ using System.Threading.Tasks;
 
 namespace SmartBook.Models;
 
-class Book
+public class Book
 {
     private Guid _id;
     private Guid _bookInfoId;
     private string _status;
     private string _addedDate;
 
+
+    public Guid Id
+    {
+        get => _id;
+    }
+
+    public Guid BookInfoId
+    {
+        get => _bookInfoId;
+    }
+
     public string Status
     {
-        get => _status; 
+        get => _status;
         private set => _status = value;
     }
 
@@ -25,4 +36,6 @@ class Book
         get => _addedDate;
         private set => _addedDate = value;
     }
+
+    public BookInfo? BookInfo { get; set; }
 }

@@ -4,32 +4,31 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SmartBook.Models
+namespace SmartBook.Models;
+
+public class User
 {
-    class User
+    private Guid _id;
+    private Guid _libraryCardId;
+    private string _name;
+    private string _email;
+
+    public Guid LibraryCardId
     {
-        private Guid _id;
-        private Guid _libraryCardId;
-        private string _name;
-        private string _email;
-
-        public Guid LibraryCardId
-        {
-            get => _libraryCardId;
-            private set => _libraryCardId = value;
-        }
-
-        public string Name
-        {
-            get => _name;
-            private set => _name = value;
-        }
-
-        public string Email
-        {
-            get => _email;
-            private set => _email = value;
-        }
-
+        get => _libraryCardId;
+        private set => _libraryCardId = value;
     }
+
+    public string Name
+    {
+        get => _name;
+        private set => _name = value;
+    }
+
+    public string Email
+    {
+        get => _email;
+        private set => _email = value;
+    }
+
 }

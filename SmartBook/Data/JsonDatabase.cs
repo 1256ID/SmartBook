@@ -8,5 +8,9 @@ namespace SmartBook.Data
 {
     internal class JsonDatabase
     {
+        public void Initilize() 
+        { 
+                        
+        }
     }
 }

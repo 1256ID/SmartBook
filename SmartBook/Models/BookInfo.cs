@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SmartBook.Models;
 
-internal class BookInfo
+public class BookInfo
 {
     private Guid _id;
     private Guid _isbn;

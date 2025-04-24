@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SmartBook.Handler
 {
-    internal class LibraryCardHandler
+    public class LibraryCardHandler 
     {
     }
 }

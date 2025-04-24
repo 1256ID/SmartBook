@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SmartBook.Handler
 {
-    internal class UserHandler
+    public class UserHandler
     {
     }
 }

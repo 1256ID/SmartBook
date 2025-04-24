@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SmartBook.Models;
- class Loan
+ public class Loan
 {
     private Guid _id;   
     private Guid _isbn;
