@@ -5,36 +5,75 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace SmartBook.Models;
 
 public class Book
 {
-    private Guid _id;
-    private Guid _bookInfoId;
-    private string _status;
-    private string _addedDate;
+    public Guid Id { get; }
+    public Guid BookInfoId { get; private set; }
+    public BookStatus Status { get; private set; }
+    public BookCondition Condition { get; private set; }
+    public DateTime AddedDate { get; } = DateTime.Now;
 
-
-    public Guid Id
+    public bool UpdateStatus(BookStatus newStatus)
     {
-        get => _id;
+        if (!Enum.IsDefined(newStatus))
+            return false;
+
+        Status = newStatus;
+        return true;
     }
 
-    public Guid BookInfoId
+    public enum BookStatus
     {
-        get => _bookInfoId;
+        Available,
+        Reserved,
+        Loaned,
+        Missing
     }
 
-    public string Status
+    public static string GetSwedishName(BookStatus status)
     {
-        get => _status;
-        private set => _status = value;
+        return status switch
+        {
+            BookStatus.Available => "Tillgänglig",
+            BookStatus.Reserved => "Reserverad",
+            BookStatus.Loaned => "Utlånad",
+            BookStatus.Missing => "Borttappad",
+            _ => "Okänt"
+        };
     }
 
-    public string AddedDate
+    public bool UpdateCondition(BookCondition newCondition)
     {
-        get => _addedDate;
-        private set => _addedDate = value;
+        if (!Enum.IsDefined(newCondition))
+            return false;
+
+        Condition = newCondition;
+        return true;
+    }
+
+    public enum BookCondition
+    {
+        New,
+        Good,
+        Fair,
+        Poor,
+        Damaged
+    }
+
+    public static string GetSwedishName(BookCondition condition)
+    {
+        return condition switch
+        {
+            BookCondition.New => "Ny",
+            BookCondition.Good => "Bra",
+            BookCondition.Fair => "Okej",
+            BookCondition.Poor => "Dålig",
+            BookCondition.Damaged => "Skadad",
+            _ => "Okänt"
+        };
     }
 
     public BookInfo? BookInfo { get; set; }

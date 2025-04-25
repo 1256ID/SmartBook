@@ -8,23 +8,11 @@ namespace SmartBook.Models;
 
 public class LibraryCard
 {
-    private Guid _id;
-    private Guid _userId;
-    private Guid _cardNumber;
-    private DateTime _issuedDate;
-    private DateTime _expiryDate;
-    private bool IsActive => IsActive == DateTime.Now >= _issuedDate && DateTime.Now <= _expiryDate;
-   
-    public DateTime IssuedDate
-    {
-        get => _issuedDate;
-        private set => _issuedDate = value;
-    }
-
-    public DateTime ExpiryDate
-    {
-        get => _expiryDate;
-        private set => _expiryDate = value;
-    }
-
+    public Guid Id { get; } = Guid.NewGuid();
+    public Guid UserId { get; private set; }
+    public Guid CardNumber { get; } = Guid.NewGuid();
+    public DateTime IssuedDate { get; } = DateTime.Today;
+    public DateTime ExpiryDate { get; } = DateTime.Today.AddYears(1);
+    private bool IsActive => IsActive == DateTime.Today <= ExpiryDate;
+    
 }

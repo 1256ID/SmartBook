@@ -8,5 +8,6 @@ namespace SmartBook.Handler
 {
     public class LibraryCardHandler 
     {
+
     }
 }

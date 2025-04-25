@@ -14,10 +14,10 @@ namespace SmartBook.Handler
             var book = Books.Find(c => c.BookInfo?.Title == title);
 
             if (string.IsNullOrEmpty(title))          
-                throw new ArgumentException("Inmatningen var antingen tom eller null.");
+                throw new ArgumentException("Error: Inmatningen var antingen tom eller null.");
             
             if (book == null)        
-                throw new ArgumentNullException("Det finns ingen bok med angiven titel i vår databas.");
+                throw new ArgumentNullException("Error: Det finns ingen bok med angiven titel i vår databas.");
             
             return book;
         }
@@ -49,27 +49,70 @@ namespace SmartBook.Handler
 
         public void Edit(Book book)
         {
-            if (book != null)
+            try
             {
-                var targetBook = Books.FirstOrDefault(c => c.Id == book.Id);               
+                if (book != null)
+                {
+                    var targetBook = Books.FirstOrDefault(c => c.Id == book.Id);
+                    if (targetBook != null)
+                    {
+                        bool statusOk = targetBook.UpdateStatus(book.Status);
+                        bool conditionOk = targetBook.UpdateCondition(book.Condition);
+
+                        if (!statusOk || !conditionOk)
+                            throw new Exception("Det gick inte att uppdatera status eller skick på grund av ogiltig inmatning.");
+
+                        BookInfo? bookInfo = book.BookInfo;
+
+                        if (bookInfo != null)                       
+                            targetBook.BookInfo?.UpdateMetadata(bookInfo.Title, bookInfo.Author, bookInfo.Genre);                       
+                        else
+                            throw new ArgumentNullException("Den angivna bokens 'BookInfo' returnerar null.");
+
+
+
+                    }
+                }
+
+                else
+                {
+                    throw new ArgumentNullException("Den angivna boken returnerar null.");
+                }
             }
+
+            catch (Exception ex) 
+            {
+                Console.WriteLine("Error: " + ex);
+            }
+           
         }
 
         public void Remove(Guid id) 
-        { 
-            var targetBook = Books.FirstOrDefault(c => c.Id == id);
-            if (targetBook != null)
+        {
+            try
             {
-                Books.Remove(targetBook);
+                if (id != Guid.Empty) 
+                    throw new ArgumentNullException("Guid är tom.");
+                
+                var targetBook = Books.FirstOrDefault(c => c.Id == id);
+
+                if (targetBook != null)
+                {
+                    Books.Remove(targetBook);
+                }
+
+                else
+                {
+                    throw new ArgumentNullException("Den angivna boken existerar inte i vår databas.");
+                }
             }
 
-            else
+            catch (Exception ex) 
             {
-                throw new ArgumentNullException("Den angivna boken existerar inte i vår databas.");
+                Console.WriteLine("Error: " + ex);           
             }
-        }
 
-
-        
+            
+        }      
     }
 }

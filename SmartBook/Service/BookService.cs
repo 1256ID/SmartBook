@@ -8,4 +8,5 @@ namespace SmartBook.Service;
 
 public class BookService
 {
+
 }

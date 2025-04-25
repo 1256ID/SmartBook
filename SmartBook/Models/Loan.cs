@@ -5,30 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SmartBook.Models;
- public class Loan
+public class Loan
 {
-    private Guid _id;   
-    private Guid _isbn;
-    private Guid _userId;
-    private DateTime _loanDate;
-    private DateTime _dueDate;
-    private DateTime _returnDate;
-
-    public DateTime LoanDate
-    {
-        get => _loanDate;
-        private set => _loanDate = value;
-    }
-
-    public DateTime DueDate
-    {
-        get => _dueDate;
-        private set => _dueDate = value;
-    }
-
-    public DateTime ReturnDate
-    {
-        get => _returnDate;
-        private set => _returnDate = value;
-    }
+    public Guid Id { get; } = Guid.NewGuid();  
+    public Guid ISBN { get; private set; }
+    public Guid UserId { get; private set; }
+    public DateTime LoanDate { get; private set; }
+    public DateTime DueDate { get; private set; }
+    public DateTime ReturnDate { get; private set; } 
 }

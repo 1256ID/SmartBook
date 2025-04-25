@@ -8,28 +8,30 @@ namespace SmartBook.Models;
 
 public class BookInfo
 {
-    private Guid _id;
-    private Guid _isbn;
-    private string _title;
-    private string _author;
-    private string _genre;
+    public Guid Id { get; } = Guid.NewGuid();
+    public Guid ISBN { get; private set; }
+    public string Title { get; private set; }
+    public string Author { get; private set; }
+    public string Genre { get; private set; }
 
-    public string Title
+    public BookInfo(string title, string author, string genre)
     {
-        get => _title;
-        private set => _title = value;
+        Title = title;
+        Author = author;
+        Genre = genre;
     }
 
-    public string Author
+    public void UpdateMetadata(string newTitle, string newAuthor, string genre)
     {
-        get => _author;
-        private set => _author = value;
+        if (!string.IsNullOrWhiteSpace(newTitle))
+            Title = newTitle;
+
+        if (!string.IsNullOrWhiteSpace(newAuthor))
+            Author = newAuthor;
+
+        if (!string.IsNullOrWhiteSpace(genre))
+            Genre = genre;
     }
 
-    public string Genre
-    {
-        get => _genre;
-        private set => _genre = value;
-    }
 }
 

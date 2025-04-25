@@ -12,6 +12,7 @@ public class Library
     private List<Book> _books = [];
     private List<LibraryCard> _cards = [];
     private List<Loan> _loans = [];
+    private List<User> _users = [];
     private DateTime _lastUpdated;
 
     public List<Book> Books
@@ -31,6 +32,12 @@ public class Library
     {
         get => _loans;
         private set => _loans = value;
+    }
+
+    public List<User> Users
+    {
+        get => _users;
+        private set => _users = value;
     }
 
     public DateTime LastUpdated
