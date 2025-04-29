@@ -9,18 +9,21 @@ public class BookHandler
     private List<Book> Books => _libraryService.GetBooks();
 
     //////////////////////////////////////////////     GET methods     ////////////////////////////////////////////////////
-    
+    ///
+    public Book GetById(Guid bookId) 
+        => Books.FirstOrDefault(c => c.Id == bookId) 
+        ?? throw new ArgumentNullException("Det finns ingen bok med angiven bookId i vår databas.");
     public Book GetByTitle(string title)
         => Books.FirstOrDefault(c => c.BookInfo.Title.Equals(title))
         ?? throw new ArgumentNullException("Det finns ingen bok med angiven titel i vår databas.");
 
     public Book GetByAuthor(string author)
         => Books.FirstOrDefault(c => c.BookInfo.Author.Equals(author))
-        ?? throw new ArgumentNullException("Det finns ingen bok med angiven titel i vår databas.");
+        ?? throw new ArgumentNullException("Det finns ingen bok med angiven författare i vår databas.");
 
     public Book GetByISBN(Guid isbn)
        => Books.FirstOrDefault(c => c.BookInfo.ISBN.Equals(isbn))
-       ?? throw new ArgumentNullException("Det finns ingen bok med angiven titel i vår databas.");
+       ?? throw new ArgumentNullException("Det finns ingen bok med angivet ISBN nummer i vår databas.");
 
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

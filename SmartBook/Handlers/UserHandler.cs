@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +14,13 @@ namespace SmartBook.Handlers
         private LibraryService _libraryService = new();
         private List<User> Users => _libraryService.GetUsers();
 
-        
+        public User GetUser(Guid userId) 
+            => Users.FirstOrDefault(c => c.Id == userId) 
+            ?? throw new ArgumentNullException("'User' objektet returnerade null.");
 
+        public bool Exists(Guid guid)
+        {
+            return Users.Any(c => c.Id == guid);
+        }
     }
 }

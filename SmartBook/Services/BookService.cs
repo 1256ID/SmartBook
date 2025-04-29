@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SmartBook.Models;
+﻿using SmartBook.Models;
 using SmartBook.Enums.Models;
 using SmartBook.Handlers;
-using System.ComponentModel;
-using static System.Reflection.Metadata.BlobBuilder;
 using SmartBook.Utilities;
 
 
@@ -17,12 +10,31 @@ namespace SmartBook.Services
     {
         private BookHandler _bookHandler = new();
 
-        
+
 
         //////////////////////////////////////////////     GET methods     ////////////////////////////////////////////////////
-        
 
-        public Book FindByTitle(string title)
+        public Book GetBookById(Guid bookId)
+        {
+            Book book = new();
+            try
+            {
+                if (Guid.Empty == bookId)
+                    throw new ArgumentException("Guid(bookId) är tomt.");
+
+                book = _bookHandler.GetById(bookId);
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+                AppTools.WaitForEnterKey();
+            }
+
+            return book;
+        }
+
+        public Book GetBookByTitle(string title)
         {
             Book book = new();
             try
@@ -40,7 +52,7 @@ namespace SmartBook.Services
             return book;
         }
 
-        public Book FindByAuthor(string author)
+        public Book GetBookByAuthor(string author)
         {
             Book book = new();
 
@@ -59,7 +71,7 @@ namespace SmartBook.Services
                 return book;          
         }
 
-        public Book FindByISBN(Guid input)
+        public Book GetBookByISBN(Guid input)
         {
             Book book = new();
 

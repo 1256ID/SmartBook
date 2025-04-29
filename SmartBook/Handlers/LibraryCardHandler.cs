@@ -15,6 +15,10 @@ namespace SmartBook.Handlers
         private LibraryService _libraryService = new();
         private List<LibraryCard> LibraryCards => _libraryService.GetLibraryCards();
 
+        public LibraryCard GetByCardNumber(Guid cardNumber) 
+            => LibraryCards.FirstOrDefault(c => c.CardNumber == cardNumber) 
+            ?? throw new ArgumentNullException("Objektet 'LibraryCard' returnerade null.");
+
         public void Add(LibraryCard card)
         {           
             LibraryCards.Add(card);               

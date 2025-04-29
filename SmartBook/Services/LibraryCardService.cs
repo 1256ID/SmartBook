@@ -16,6 +16,26 @@ namespace SmartBook.Services
     {
         private LibraryCardHandler _libraryCardHandler = new();
 
+
+        public LibraryCard FindByCardNumber(Guid cardNumber)
+        {
+            LibraryCard card = new();
+            try
+            {
+                if (cardNumber == Guid.Empty)
+                    throw new ArgumentException("Guid (CardNumber) är tomt.");
+
+                card = _libraryCardHandler.GetByCardNumber(cardNumber);
+            }
+
+            catch (Exception ex) 
+            {
+                Console.WriteLine("Error: " + ex.Message);
+                AppTools.WaitForEnterKey();
+            }
+
+            return card;
+        }
         public bool CreateLibraryCard(Guid userId)
         {
             bool libraryCardHasBeenCreated = false;

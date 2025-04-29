@@ -30,10 +30,10 @@ public static class LibraryCardFormat
         string status = LibraryCardStatusExtensions.GetSwedishName(card.Status);
         string outputArray =
 
-            "\nKort nummer: " + card.CardNumber.ToString() +
-            "\nUtfärdsdatum: " + card.IssuedDate.ToString("yyyy-MM-dd") +
-            "\nUtgångsdatum: " + card.ExpiryDate.ToString("yyyy-MM-dd") +
-            "\nLånekortsstatus: " + status;
+            "\nKort nummer: " +         card.CardNumber.ToString() +
+            "\nUtfärdsdatum: " +        card.IssuedDate.ToString("yyyy-MM-dd") +
+            "\nUtgångsdatum: " +        card.ExpiryDate.ToString("yyyy-MM-dd") +
+            "\nLånekortsstatus: " +     status;
         
         return outputArray;
     }
@@ -44,10 +44,10 @@ public static class LibraryCardFormat
         
         string[] outputArray =
         [
-            "Kort nummer: " + card.CardNumber.ToString(),
-            "Utfärdsdatum: " + card.IssuedDate.ToString("yyyy-MM-dd"),
-            "Utgångsdatum: " + card.ExpiryDate.ToString("yyyy-MM-dd"),
-            "Lånekortsstatus: " + status
+            "Kort nummer: " +       card.CardNumber.ToString(),
+            "Utfärdsdatum: " +      card.IssuedDate.ToString("yyyy-MM-dd"),
+            "Utgångsdatum: " +      card.ExpiryDate.ToString("yyyy-MM-dd"),
+            "Lånekortsstatus: " +   status
         ];
 
         return outputArray;

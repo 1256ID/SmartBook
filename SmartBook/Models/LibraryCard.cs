@@ -16,6 +16,10 @@ public class LibraryCard
     public DateTime ExpiryDate { get; } = DateTime.Today.AddYears(1);
     public LibraryCardStatus Status { get; private set; }
 
+    public LibraryCard()
+    {
+
+    }
     public LibraryCard (Guid userId)
     {        
         UserId = userId;

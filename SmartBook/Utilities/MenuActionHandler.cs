@@ -57,12 +57,12 @@ public class MenuActionHandler
                     {
                         if (index == 0)
                         {
-                            book = _bookService.FindByTitle(input);
+                            book = _bookService.GetBookByTitle(input);
                         }
 
                         else if (index == 1)
                         {
-                            book = _bookService.FindByAuthor(input);
+                            book = _bookService.GetBookByAuthor(input);
                         }
 
                         else if (index == 2) 
@@ -73,7 +73,7 @@ public class MenuActionHandler
 
                             if (validGuid)
                             {
-                                book = _bookService.FindByISBN(guid);
+                                book = _bookService.GetBookByISBN(guid);
                             }
 
                             else
