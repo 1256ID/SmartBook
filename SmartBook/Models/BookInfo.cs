@@ -14,6 +14,10 @@ public class BookInfo
     public string Author { get; private set; }
     public string Genre { get; private set; }
 
+    public BookInfo()
+    {
+
+    }
     public BookInfo(Guid isbn, string title, string author, string genre)
     {
         if (isbn == Guid.Empty)

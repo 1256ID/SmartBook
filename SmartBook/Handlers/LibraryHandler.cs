@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using SmartBook.Data;
 using SmartBook.Models;
 
-namespace SmartBook.Handler
+namespace SmartBook.Handlers
 {
     public class LibraryHandler
     {

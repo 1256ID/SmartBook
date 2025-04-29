@@ -8,7 +8,7 @@ using SmartBook.Models;
 using SmartBook.Enums.Models;
 using SmartBook.Services;
 
-namespace SmartBook.Handler
+namespace SmartBook.Handlers
 {
     public class LibraryCardHandler 
     {

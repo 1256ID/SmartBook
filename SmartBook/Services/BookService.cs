@@ -5,17 +5,22 @@ using System.Text;
 using System.Threading.Tasks;
 using SmartBook.Models;
 using SmartBook.Enums.Models;
-using SmartBook.Handler;
+using SmartBook.Handlers;
 using System.ComponentModel;
 using static System.Reflection.Metadata.BlobBuilder;
+using SmartBook.Utilities;
 
 
 namespace SmartBook.Services
 {
     public class BookService
     {
-        private BookHandler BookHandler = new();
+        private BookHandler _bookHandler = new();
 
+        
+
+        //////////////////////////////////////////////     GET methods     ////////////////////////////////////////////////////
+        
 
         public Book FindByTitle(string title)
         {
@@ -23,14 +28,13 @@ namespace SmartBook.Services
             try
             {
                 ArgumentException.ThrowIfNullOrEmpty(title, "Inmatningen för titel är antingen tom eller null.");
-                book = BookHandler.FindByTitle(title);
+                book = _bookHandler.GetByTitle(title);
             }
 
             catch (Exception ex)
             {
                 Console.WriteLine("Error: " + ex.Message);
-                Console.ReadKey();
-                Console.WriteLine("\nKlicka på valfri tangent för att fortsätta.");
+                AppTools.WaitForEnterKey();
             }
 
             return book;
@@ -43,72 +47,127 @@ namespace SmartBook.Services
             try
             {
                 ArgumentException.ThrowIfNullOrEmpty(author, "Inmatningen för författare är antingen tom eller null.");
-                book = BookHandler.FindByAuthor(author);
+                book = _bookHandler.GetByAuthor(author);
             }
 
             catch (Exception ex)
             {
                 Console.WriteLine("Error: " + ex.Message);
-                Console.ReadKey();
-                Console.WriteLine("\nKlicka på valfri tangent för att fortsätta.");
+                AppTools.WaitForEnterKey();
+            }
+
+                return book;          
+        }
+
+        public Book FindByISBN(Guid input)
+        {
+            Book book = new();
+
+            try
+            {
+                if (input.Equals(Guid.Empty))
+                    throw new ArgumentException("Guid(ISBN) är tomt.");
+
+                               
+                book = _bookHandler.GetByISBN(input);
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+                AppTools.WaitForEnterKey();
             }
 
             return book;
         }
 
-        public void AddBook(BookStatus status, BookCondition condition, Guid isbn, string title, string author, string genre)
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+        ////////////////////////////////////////////////     Other methods     ////////////////////////////////////////////////
+
+        public bool AddBook(BookStatus status, BookCondition condition, Guid isbn, string title, string author, string genre)
         {
+            bool bookHasBeenAdded = false;
+
             try
-            {               
-                BookInfo bookInfo = new(isbn, title, author, genre);
+            {
+                BookInfo bookInfo;
+                
+                if (_bookHandler.CheckIfBookInfoExists(isbn))
+                {
+                    bookInfo = _bookHandler.GetBookInfoByISBN(isbn);
+                }
+
+                else
+                {
+                    bookInfo = new(isbn, title, author, genre);
+                }
+
                 Book book = new(bookInfo);
                 book.UpdateStatus(status);
                 book.UpdateCondition(condition);
-                BookHandler.Add(book);
+
+                _bookHandler.Add(book);
+                bookHasBeenAdded = true;
             }
 
             catch (Exception ex)
             {
                 Console.WriteLine("Error: " + ex.Message);
-                Console.ReadKey();
-                Console.WriteLine("\nKlicka på valfri tangent för att fortsätta.");
-            }             
+                AppTools.WaitForEnterKey();
+            }   
+            
+            return bookHasBeenAdded;
         }
 
-        public void EditBook(Book book)
-        {            
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        public bool EditBook(Book book)
+        {
+            bool bookHasBeenEdited = false;
             try
             {
                 ArgumentNullException.ThrowIfNull(book);
-                BookHandler.Edit(book);
+                _bookHandler.Edit(book);
+                bookHasBeenEdited = true;
+
             }
 
             catch (Exception ex)
             {
                 Console.WriteLine("Error: " + ex.Message);
-                Console.ReadKey();
-                Console.WriteLine("\nKlicka på valfri tangent för att fortsätta.");
+                AppTools.WaitForEnterKey();
             }
+
+            return bookHasBeenEdited;
         }
 
-        public void RemoveBook(Guid id)
-        {
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        public bool RemoveBook(Guid id)
+        {
+            bool bookHasBeenRemoved = false;
             try
             {
-                if (id == Guid.Empty)
-                    throw new ArgumentException("Guid är tomt.");
+                if (id.Equals(Guid.Empty))
+                    throw new ArgumentException("Guid(BookId) är tomt.");
                                   
-                BookHandler.Remove(id);
+                _bookHandler.Remove(id);
+                bookHasBeenRemoved = true;
             }
 
             catch (Exception ex)
             {
                 Console.WriteLine("Error: " + ex.Message);
-                Console.ReadKey();
-                Console.WriteLine("\nKlicka på valfri tangent för att fortsätta.");
+                AppTools.WaitForEnterKey();
             }
+
+            return bookHasBeenRemoved;
         }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
     }

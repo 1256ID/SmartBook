@@ -34,11 +34,11 @@ public class MenuManager
             switch (index)
             {
                 case 0:
-                    menuActionHandler.AddBook();
+                    menuActionHandler.SearchForBook();
                 break;
                     
                 case 1:
-                    menuActionHandler.RemoveBook();
+                    menuActionHandler.AddBook();
                 break;
 
                 case 2:

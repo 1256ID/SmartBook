@@ -5,8 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SmartBook.Enums.Models;
-using SmartBook.Handler;
+using SmartBook.Handlers;
 using SmartBook.Models;
+using SmartBook.Utilities;
 
 
 namespace SmartBook.Services
@@ -15,9 +16,9 @@ namespace SmartBook.Services
     {
         private LibraryCardHandler _libraryCardHandler = new();
 
-        public void CreateLibraryCard(Guid userId)
+        public bool CreateLibraryCard(Guid userId)
         {
-
+            bool libraryCardHasBeenCreated = false;
             try
             {
                 if (userId == Guid.Empty) 
@@ -25,56 +26,60 @@ namespace SmartBook.Services
 
                 LibraryCard libraryCard = new(userId);
                 libraryCard.UpdateStatus(LibraryCardStatus.Active);
+
                 _libraryCardHandler.Add(libraryCard);
+                libraryCardHasBeenCreated = true;
 
             }
             catch (Exception ex) 
             {
                 Console.WriteLine("Error: " + ex.Message);
-                Console.ReadKey();
-                Console.WriteLine("\nKlicka på valfri tangent för att fortsätta.");
+                AppTools.WaitForEnterKey();
             }
             
-            
+            return libraryCardHasBeenCreated;
         }
 
-        public void EditStatus(Guid id, LibraryCardStatus newStatus)
+        public bool EditStatus(Guid id, LibraryCardStatus newStatus)
         {
+            bool libraryCardHasBeenEdited = false;
             try
             {
                 if (id == Guid.Empty)
                     throw new ArgumentException("Guid är tom.");
 
                 _libraryCardHandler.EditStatus(id, newStatus);
+                libraryCardHasBeenEdited = true;
             }
 
             catch (Exception ex)
             {
                 Console.WriteLine("Error: " + ex.Message);
-                Console.ReadKey();
-                Console.WriteLine("\nKlicka på valfri tangent för att fortsätta.");
+                AppTools.WaitForEnterKey();
             }
 
+            return libraryCardHasBeenEdited;
         }
 
-        public void Remove(Guid id)
+        public bool Remove(Guid id)
         {
+            bool libraryCardHasBeenRemoved = false;
             try
             {
                 if (id == Guid.Empty)
                     throw new ArgumentNullException("Guid är tom.");
 
                 _libraryCardHandler.Remove(id);
+                libraryCardHasBeenRemoved = true;
             }
 
             catch (Exception ex)
             {
                 Console.WriteLine("Error: " + ex.Message);
-                Console.ReadKey();
-                Console.WriteLine("\nKlicka på valfri tangent för att fortsätta.");
+                AppTools.WaitForEnterKey();
             }
 
-
+            return libraryCardHasBeenRemoved;
         }
     }
 }

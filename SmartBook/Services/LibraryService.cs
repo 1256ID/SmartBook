@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SmartBook.Handler;
+using SmartBook.Handlers;
 using SmartBook.Models;
+using SmartBook.Utilities;
 
 namespace SmartBook.Services
 {
@@ -23,9 +24,8 @@ namespace SmartBook.Services
 
             catch (Exception ex)
             {
-                Console.WriteLine("Error: " + ex);
-                Console.ReadKey();
-                Console.WriteLine("\nKlicka på valfri tangent för att fortsätta.");
+                Console.WriteLine("Error: " + ex.Message);
+                AppTools.WaitForEnterKey();
             }
 
             return bookList;
@@ -42,9 +42,8 @@ namespace SmartBook.Services
 
             catch (Exception ex)
             {
-                Console.WriteLine("Error: " + ex);
-                Console.ReadKey();
-                Console.WriteLine("\nKlicka på valfri tangent för att fortsätta.");
+                Console.WriteLine("Error: " + ex.Message);
+                AppTools.WaitForEnterKey();
             }
 
             return libraryCardList;
@@ -62,9 +61,8 @@ namespace SmartBook.Services
 
             catch (Exception ex)
             {
-                Console.WriteLine("Error: " + ex);
-                Console.ReadKey();
-                Console.WriteLine("\nKlicka på valfri tangent för att fortsätta.");
+                Console.WriteLine("Error: " + ex.Message);
+                AppTools.WaitForEnterKey();
             }
 
             return loanList;          
@@ -81,43 +79,48 @@ namespace SmartBook.Services
 
             catch (Exception ex)
             {
-                Console.WriteLine("Error: " + ex);
-                Console.ReadKey();
-                Console.WriteLine("\nKlicka på valfri tangent för att fortsätta.");
+                Console.WriteLine("Error: " + ex.Message);
+                AppTools.WaitForEnterKey();
             }
 
             return userList;           
         }
 
 
-        public void LoadDB()
+        public bool LoadDB()
         {
+            bool dbSuccededLoading = false;
             try
             {
                 _libraryHandler.LoadFromDB();
+                dbSuccededLoading = true;
             }
 
             catch (Exception ex)
             {
-                Console.WriteLine("Error: " + ex);
-                Console.ReadKey();
-                Console.WriteLine("\nKlicka på valfri tangent för att fortsätta.");
+                Console.WriteLine("Error: " + ex.Message);
+                AppTools.WaitForEnterKey();
             }
+
+            return dbSuccededLoading;
         }
 
-        public void SaveDB()
-        {           
+        public bool SaveDB()
+        {
+            bool dbSuccededSaving = false;
             try
             {
                 _libraryHandler.SaveToDB();
+                dbSuccededSaving = true;
             }
 
             catch (Exception ex)
             {
-                Console.WriteLine("Error: " + ex);
-                Console.ReadKey();
-                Console.WriteLine("\nKlicka på valfri tangent för att fortsätta.");
+                Console.WriteLine("Error: " + ex.Message);
+                AppTools.WaitForEnterKey();
             }
+
+            return dbSuccededSaving;
         }
     }
 }
