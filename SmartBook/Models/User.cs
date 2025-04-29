@@ -9,7 +9,7 @@ namespace SmartBook.Models;
 public class User
 {
     public Guid Id { get; } = Guid.NewGuid();
-    public Guid LibraryCardId { get; private set; }
+    public LibraryCard? LibraryCard { get; private set; }
     public string? Name { get; private set; }
-    public string? Email { get; private set; }
+    public string? Email { get; private set; }   
 }

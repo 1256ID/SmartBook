@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SmartBook.Data;
 using SmartBook.Models;
 
 namespace SmartBook.Handler
@@ -10,7 +11,11 @@ namespace SmartBook.Handler
     public class LibraryHandler
     {
         private Library _library = new();
+
+        private JsonDatabase _db = new();
         
+        // Alla GET metoder
+
         public List<Book> GetAllBooks()
         { 
             return _library.Books ?? throw new ArgumentNullException("Listan med böcker är null.");
@@ -30,5 +35,18 @@ namespace SmartBook.Handler
         {
             return _library.Users ?? throw new ArgumentNullException("Listan med användare är null.");
         }
+
+
+        public void LoadFromDB()
+        {
+            _library = _db.Load();
+        }
+
+        public void SaveToDB()
+        {
+            _db.Save(_library);
+        }
+
+        
     }
 }

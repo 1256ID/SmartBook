@@ -8,6 +8,14 @@ namespace SmartBook.Data
 {
     public class SeedData
     {
+        public string LoadData()
+        {
+            string data = "";
+
+            return data;
+        }
+
+
 
     }
 }

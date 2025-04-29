@@ -4,77 +4,42 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using SmartBook.Enums.Models;
 
 
 namespace SmartBook.Models;
 
 public class Book
 {
-    public Guid Id { get; }
-    public Guid BookInfoId { get; private set; }
+    public Guid Id { get; } = Guid.NewGuid();
+    public BookInfo BookInfo { get; private set; }
     public BookStatus Status { get; private set; }
     public BookCondition Condition { get; private set; }
     public DateTime AddedDate { get; } = DateTime.Now;
 
-    public bool UpdateStatus(BookStatus newStatus)
+    public Book()
+    {
+    }
+    public Book(BookInfo bookinfo)
+    {
+        BookInfo = bookinfo;
+    }
+
+    public void UpdateStatus(BookStatus newStatus)
     {
         if (!Enum.IsDefined(newStatus))
-            return false;
+            throw new ArgumentException("Bokstatus innehåller felaktivt format.");
 
-        Status = newStatus;
-        return true;
+        Status = newStatus;   
     }
 
-    public enum BookStatus
-    {
-        Available,
-        Reserved,
-        Loaned,
-        Missing
-    }
-
-    public static string GetSwedishName(BookStatus status)
-    {
-        return status switch
-        {
-            BookStatus.Available => "Tillgänglig",
-            BookStatus.Reserved => "Reserverad",
-            BookStatus.Loaned => "Utlånad",
-            BookStatus.Missing => "Borttappad",
-            _ => "Okänt"
-        };
-    }
-
-    public bool UpdateCondition(BookCondition newCondition)
+    public void UpdateCondition(BookCondition newCondition)
     {
         if (!Enum.IsDefined(newCondition))
-            return false;
+            throw new ArgumentException("Bokskick innehåller felaktivt format.");
 
         Condition = newCondition;
-        return true;
     }
 
-    public enum BookCondition
-    {
-        New,
-        Good,
-        Fair,
-        Poor,
-        Damaged
-    }
-
-    public static string GetSwedishName(BookCondition condition)
-    {
-        return condition switch
-        {
-            BookCondition.New => "Ny",
-            BookCondition.Good => "Bra",
-            BookCondition.Fair => "Okej",
-            BookCondition.Poor => "Dålig",
-            BookCondition.Damaged => "Skadad",
-            _ => "Okänt"
-        };
-    }
-
-    public BookInfo? BookInfo { get; set; }
+    
 }

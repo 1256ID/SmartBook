@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SmartBook.Enums.Models;
 
 namespace SmartBook.Models;
 
@@ -13,6 +14,19 @@ public class LibraryCard
     public Guid CardNumber { get; } = Guid.NewGuid();
     public DateTime IssuedDate { get; } = DateTime.Today;
     public DateTime ExpiryDate { get; } = DateTime.Today.AddYears(1);
-    private bool IsActive => IsActive == DateTime.Today <= ExpiryDate;
-    
+    public LibraryCardStatus Status { get; private set; }
+
+    public LibraryCard (Guid userId)
+    {        
+        UserId = userId;
+    }
+
+    public void UpdateStatus(LibraryCardStatus newStatus)
+    {
+        if (!Enum.IsDefined(newStatus))
+            throw new ArgumentException("Lånekorts status innehåller ogiltigt format.");
+
+        Status = newStatus;        
+    }
+
 }

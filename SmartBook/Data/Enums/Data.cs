@@ -4,9 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SmartBook.Service
+namespace SmartBook.Data.Enums;
+
+public enum Data
 {
-    public class UserService
-    {
-    }
+    Book,
+    BookInfo,
+    Library,
+    LibraryCard,
+    Loan,
+    User
 }
+

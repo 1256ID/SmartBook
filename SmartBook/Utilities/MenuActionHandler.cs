@@ -8,8 +8,6 @@ namespace SmartBook.Utilities;
 
 public class MenuActionHandler
 {
-
-
     public void AddBook()
     {
 

@@ -4,25 +4,27 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SmartBook.Models;
-using SmartBook.Services;
+using SmartBook.Handler;
 
-namespace SmartBook.Handler
+namespace SmartBook.Services
 {
-    public class LoanHandler
+    public class LoanService
     {
-        private LibraryService _libraryService = new();
-        private List<Loan> loans => _libraryService.GetLoans();
-
-
-        public Loan GetLoan(Guid loanId)
+        private LoanHandler loanHandler = new();
+        public Loan GetLoan(Guid id)
         {
             Loan loan = new();
+
             try
-            {                              
-                loan = loans.FirstOrDefault(c => c.Id == loanId) ?? throw new ArgumentNullException("Det angivna lånet returnerade null.");
+            {
+                if (id == Guid.Empty)
+                    throw new ArgumentException("LoanId är null");
+
+
+                loan = loanHandler.GetLoan(id);
             }
 
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 Console.WriteLine("Error: " + ex.Message);
                 Console.ReadKey();
@@ -33,5 +35,6 @@ namespace SmartBook.Handler
 
 
         }
+
     }
 }

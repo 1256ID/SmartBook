@@ -8,12 +8,12 @@ namespace SmartBook.Models;
 
 public class Library
 {
-    public string Name { get; set; } = "Ivans Bibliotek";
+    public string Name { get; } = "Ivans Bibliotek";
     private List<Book> _books = [];
     private List<LibraryCard> _cards = [];
     private List<Loan> _loans = [];
     private List<User> _users = [];
-    private DateTime _lastUpdated;
+    public DateTime LastUpdated { get; private set; }
 
     public List<Book> Books
     {
@@ -38,11 +38,5 @@ public class Library
     {
         get => _users;
         private set => _users = value;
-    }
-
-    public DateTime LastUpdated
-    {
-        get => _lastUpdated; 
-        private set => _lastUpdated = value;
-    }
+    }  
 }
