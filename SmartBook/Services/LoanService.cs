@@ -6,32 +6,21 @@ using System.Threading.Tasks;
 using SmartBook.Models;
 using SmartBook.Handlers;
 using SmartBook.Utilities;
+using SmartBook.Repository;
 
 namespace SmartBook.Services
 {
     public class LoanService
     {
-        private LoanHandler loanHandler = new();
-        public Loan GetLoan(Guid id)
+        private LibraryRepository _repository;
+        public LoanService(LibraryRepository repository)
         {
-            Loan loan = new();
-
-            try
-            {
-                if (id == Guid.Empty)
-                    throw new ArgumentException("LoanId är null");
-
-                loan = loanHandler.GetLoan(id);
-            }
-
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error: " + ex.Message);
-                AppTools.WaitForEnterKey();
-            }
-
-            return loan;
+            _repository = repository;
         }
 
+        private List<Loan> loans => _repository.GetLoans();
+        public Loan GetLoan(Guid loanId)
+            => loans.FirstOrDefault(c => c.Id == loanId)
+            ?? throw new InvalidOperationException("Inget boklån med angivet " + nameof(loanId) + " hittades.");
     }
 }

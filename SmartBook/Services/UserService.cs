@@ -1,55 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using SmartBook.Handlers;
 using SmartBook.Models;
+using SmartBook.Repository;
 using SmartBook.Utilities;
 
 namespace SmartBook.Services;
 
 public class UserService
 {
-    private UserHandler _userHandler = new();
-    public User GetUser(Guid userId)
+    private LibraryRepository _repository;
+    public UserService(LibraryRepository repository)
     {
-        User user = new();
-        try
-        {
-            if (userId == Guid.Empty)
-                throw new ArgumentException("Guid (UserId) är tomt.");
+        _repository = repository;
+    }
+    private List<User> Users => _repository.GetUsers();
 
-            user = _userHandler.GetUser(userId) ?? throw new ArgumentNullException("'User' objektet returnerade null.");
-        }
+    public User GetUser(Guid userId)
+        => Users.FirstOrDefault(c => c.Id == userId)
+        ?? throw new InvalidOperationException("Ingen användare med angivet " + nameof(userId) + " hittades.");
 
-        catch (Exception ex) 
-        {
-            Console.WriteLine("Error: " + ex.Message);
-            AppTools.WaitForEnterKey();       
-        }
+    public List<User> GetAllUsers() => Users;
 
-        return user;
+    public bool Exists(Guid guid)
+    {
+        return Users.Any(c => c.Id == guid);
     }
 
-    public bool CheckIfUserExists(Guid userId)
+    public bool AnyUserExists()
     {
-        bool result = false;
-        try
-        {
-            if (userId == Guid.Empty)
-                throw new ArgumentException("Guid (userId) är tomt.");
-
-            result = _userHandler.Exists(userId);
-        }
-
-        catch (Exception ex) 
-        {
-            Console.WriteLine("Error: " + ex.Message);
-            AppTools.WaitForEnterKey();
-        }
-
-        return result;
-        
+        return Users.Count != 0;
     }
 }

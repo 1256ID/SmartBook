@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace SmartBook.Utilities;
+namespace SmartBook.UI;
 
 public class MenuManager
 {
@@ -17,9 +17,7 @@ public class MenuManager
         int index = 0;
 
         do
-        {
-            
-
+        {           
             index = Menu.Display
                 (
                     "Böcker",

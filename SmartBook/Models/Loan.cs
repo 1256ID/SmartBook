@@ -21,9 +21,14 @@ public class Loan
         
     }
 
-    public Loan(Guid iSBN, Guid cardNumber, Guid bookId, Guid userId)
-    {       
-        ISBN = iSBN;
+    public Loan(Guid isbn, Guid cardNumber, Guid bookId, Guid userId)
+    {
+        ValidateGuid(isbn, nameof(isbn));
+        ValidateGuid(cardNumber, nameof(cardNumber));
+        ValidateGuid(bookId, nameof(bookId));
+        ValidateGuid(userId, nameof(userId));
+
+        ISBN = isbn;
         CardNumber = cardNumber;
         BookId = bookId;
         UserId = userId;
@@ -35,5 +40,13 @@ public class Loan
     {
         ReturnDate = DateTime.Now;
     }
+
+    public void ValidateGuid(Guid guid, string paramName)
+    {    
+        if (guid == Guid.Empty) 
+            throw new ArgumentException($"Guid '{paramName}' är tomt.", paramName);
+    }
+
+  
 
 }

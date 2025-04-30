@@ -25,20 +25,28 @@ public class Book
         BookInfo = bookinfo;
     }
 
-    public void UpdateStatus(BookStatus newStatus)
+    public void SetStatus(BookStatus status)
     {
-        if (!Enum.IsDefined(newStatus))
-            throw new ArgumentException("Bokstatus innehåller felaktivt format.");
-
-        Status = newStatus;   
+        ValidateStatus(status);
+        Status = status;
     }
 
-    public void UpdateCondition(BookCondition newCondition)
-    {
-        if (!Enum.IsDefined(newCondition))
-            throw new ArgumentException("Bokskick innehåller felaktivt format.");
+    public void SetConditon(BookCondition condition)
+    {        
+        ValidateConditon(condition);
+        Condition = condition;
+    }
 
-        Condition = newCondition;
+    public void ValidateStatus(BookStatus status)
+    {
+        if (!Enum.IsDefined(status))
+            throw new ArgumentException("Bokstatus innehåller felaktivt format.", nameof(status));  
+    }
+
+    public void ValidateConditon(BookCondition condition)
+    {
+        if (!Enum.IsDefined(condition))
+            throw new ArgumentException("Bokskick innehåller felaktivt format.", nameof(condition));       
     }
 
     

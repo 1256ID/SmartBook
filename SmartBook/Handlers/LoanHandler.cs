@@ -5,33 +5,44 @@ using System.Text;
 using System.Threading.Tasks;
 using SmartBook.Models;
 using SmartBook.Services;
+using SmartBook.Utilities;
 
 namespace SmartBook.Handlers
 {
     public class LoanHandler
     {
-        private LibraryService _libraryService = new();
-        private List<Loan> loans => _libraryService.GetLoans();
 
+        private LoanService _loanService;
+
+        public LoanHandler(LoanService loanService)
+        {
+            _loanService = loanService;
+        }
 
         public Loan GetLoan(Guid loanId)
         {
             Loan loan = new();
+
             try
-            {                              
-                loan = loans.FirstOrDefault(c => c.Id == loanId) ?? throw new ArgumentNullException("Det angivna lånet returnerade null.");
+            {
+                if (loanId == Guid.Empty)
+                    throw new ArgumentException
+                         (
+                             "Guid '" + nameof(loanId) + "' är tomt.",
+                             nameof(loanId)
+                         );
+
+                loan = _loanService.GetLoan(loanId);
             }
 
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 Console.WriteLine("Error: " + ex.Message);
-                Console.ReadKey();
-                Console.WriteLine("\nKlicka på valfri tangent för att fortsätta.");
+                AppTools.WaitForEnterKey();
             }
 
             return loan;
-
-
         }
+
     }
 }

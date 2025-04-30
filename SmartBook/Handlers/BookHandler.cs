@@ -1,78 +1,271 @@
-﻿using SmartBook.Models;
+﻿using SmartBook.Data;
+using SmartBook.Enums.Models;
+using SmartBook.Models;
 using SmartBook.Services;
+using SmartBook.Utilities;
 
 namespace SmartBook.Handlers;
 
 public class BookHandler
 {
-    private LibraryService _libraryService = new();
-    private List<Book> Books => _libraryService.GetBooks();
+    private BookService _bookService;
+    private List<Book> Books => _bookService.GetAllBooks();
+
+    public BookHandler(BookService bookService)
+    {
+        _bookService = bookService;
+    }
+
 
     //////////////////////////////////////////////     GET methods     ////////////////////////////////////////////////////
-    ///
-    public Book GetById(Guid bookId) 
-        => Books.FirstOrDefault(c => c.Id == bookId) 
-        ?? throw new ArgumentNullException("Det finns ingen bok med angiven bookId i vår databas.");
-    public Book GetByTitle(string title)
-        => Books.FirstOrDefault(c => c.BookInfo.Title.Equals(title))
-        ?? throw new ArgumentNullException("Det finns ingen bok med angiven titel i vår databas.");
 
-    public Book GetByAuthor(string author)
-        => Books.FirstOrDefault(c => c.BookInfo.Author.Equals(author))
-        ?? throw new ArgumentNullException("Det finns ingen bok med angiven författare i vår databas.");
+    public Book GetBookById(Guid bookId)
+    {
+        Book book = new();
+        try
+        {
+            if (bookId == Guid.Empty)
+                throw new ArgumentException
+                (
+                    "Guid '" + nameof(bookId) + "' är tomt.",
+                    nameof(bookId)
+                );
 
-    public Book GetByISBN(Guid isbn)
-       => Books.FirstOrDefault(c => c.BookInfo.ISBN.Equals(isbn))
-       ?? throw new ArgumentNullException("Det finns ingen bok med angivet ISBN nummer i vår databas.");
+            book = _bookService.GetById(bookId);
+        }
 
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error: " + ex.Message);
+            AppTools.WaitForEnterKey();
+        }
+
+        return book;
+    }
+
+    public Book GetBookByTitle(string title)
+    {
+        Book book = new();
+        try
+        {
+            ArgumentException.ThrowIfNullOrEmpty
+            (
+                nameof(title),
+                nameof(title) + " är antingen tomt eller null."
+            );
+
+            book = _bookService.GetByTitle(title);
+        }
+
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error: " + ex.Message);
+            AppTools.WaitForEnterKey();
+        }
+
+        return book;
+    }
+
+    public Book GetBookByAuthor(string author)
+    {
+        Book book = new();
+
+        try
+        {
+            ArgumentException.ThrowIfNullOrEmpty
+            (
+                nameof(author),
+                nameof(author) + " är antingen tomt eller null."
+            );
+
+            book = _bookService.GetByAuthor(author);
+        }
+
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error: " + ex.Message);
+            AppTools.WaitForEnterKey();
+        }
+
+        return book;
+    }
+
+    public Book GetBookByISBN(Guid isbn)
+    {
+        Book book = new();
+
+        try
+        {
+            if (isbn == Guid.Empty)
+                throw new ArgumentException
+                (
+                    "Guid '" + nameof(isbn) + "' är tomt.",
+                    nameof(isbn)
+                );
+
+
+            book = _bookService.GetByISBN(isbn);
+        }
+
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error: " + ex.Message);
+            AppTools.WaitForEnterKey();
+        }
+
+        return book;
+    }
+
+
+    public List<Book> GetAllBooks() => _bookService.GetAllBooks();
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 
     ////////////////////////////////////////////////     Other methods     ////////////////////////////////////////////////
-    
-    public void Add(Book book) => Books.Add(book); 
-    
-    public void Edit(Book book)
-    {           
-        var targetBook = Books.FirstOrDefault(c => c.Id.Equals(book.Id)) ?? throw new ArgumentNullException("De valda objektet 'Book' returnerar null.");                               
-        targetBook.UpdateStatus(book.Status);
-        targetBook.UpdateCondition(book.Condition);
 
-        BookInfo bookInfo = book.BookInfo ?? throw new ArgumentNullException("Den angivna bokens 'BookInfo' returnerar null.");
-           
-        targetBook.BookInfo.UpdateMetadata(bookInfo.ISBN, bookInfo.Title, bookInfo.Author, bookInfo.Genre);                       
-    }
-    
-    public void Remove(Guid id) 
-    {                                                 
-        var targetBook = Books.FirstOrDefault(c => c.Id.Equals(id)) ?? throw new ArgumentNullException("De valda objektet 'Book' returnerar null.");  
-            
-        Books.Remove(targetBook);    
-    }
-
-    public bool CheckIfBookInfoExists(Guid isbn)
+    public bool AddBook(BookStatus status, BookCondition condition, Guid isbn, string title, string author, BookGenre genre)
     {
-        if (Guid.Empty == isbn)
-            throw new ArgumentException("Guid är tomt.");
+        bool bookHasBeenAdded = false;
 
-        return Books.Exists(c => c.BookInfo.ISBN.Equals(isbn));
+        try
+        {
+            if (isbn == Guid.Empty)
+                throw new ArgumentException
+                (
+                    "Guid '" + nameof(isbn) + "' är tomt.",
+                    nameof(isbn)
+                );
+
+            BookInfo bookInfo;
+
+            if (_bookService.BookExists(isbn))
+            {
+                bookInfo = _bookService.GetBookInfoByISBN(isbn);
+            }
+
+            else
+            {
+                bookInfo = new(isbn, title, author);
+                bookInfo.SetGenre(genre);
+            }
+
+            Book book = new(bookInfo);
+            book.ValidateStatus(status);
+            book.ValidateConditon(condition);
+
+            _bookService.Add(book);
+            bookHasBeenAdded = true;
+        }
+
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error: " + ex.Message);
+            AppTools.WaitForEnterKey();
+        }
+
+        return bookHasBeenAdded;
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    //////////////////////////////////////////////     BookInfo methods     //////////////////////////////////////////////
-
-    public BookInfo GetBookInfoByISBN(Guid isbn)
+    public bool EditBook(Book book)
     {
-        if (Guid.Empty == isbn)
-            throw new ArgumentException("Guid(ISBN) är tomt.");
+        bool bookHasBeenEdited = false;
+        try
+        {
+            ArgumentNullException.ThrowIfNull
+            (
+                nameof(book) + " returnerade null.",
+                nameof(book)
+            );
 
-        var bookInfo = Books.FirstOrDefault(c => c.BookInfo.ISBN.Equals(isbn)) ?? throw new ArgumentNullException("Den eftersökta 'BookInfo' returnerade null.");
-        
-        return bookInfo.BookInfo;
+            _bookService.Edit(book);
+            bookHasBeenEdited = true;
+
+        }
+
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error: " + ex.Message);
+            AppTools.WaitForEnterKey();
+        }
+
+        return bookHasBeenEdited;
     }
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////   
-    
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public bool RemoveBook(Guid bookId)
+    {
+        bool bookHasBeenRemoved = false;
+        try
+        {
+            if (bookId == Guid.Empty)
+                throw new ArgumentException
+                (
+                    "Guid '" + nameof(bookId) + "' är tomt.",
+                    nameof(bookId)
+                );
+
+            _bookService.Remove(bookId);
+            bookHasBeenRemoved = true;
+        }
+
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error: " + ex.Message);
+            AppTools.WaitForEnterKey();
+        }
+
+        return bookHasBeenRemoved;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public bool BookExists(Guid bookId)
+    {
+        bool exists = false;
+        try
+        {
+            if (bookId == Guid.Empty)
+                throw new ArgumentException
+                (
+                    "Guid '" + nameof(bookId) + "' är tomt.",
+                    nameof(bookId)
+                );
+
+            exists = _bookService.BookExists(bookId);
+        }
+
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error: " + ex.Message);
+            AppTools.WaitForEnterKey();
+        }
+
+        return exists;
+    }
+
+    public BookInfo GetBookInfoByISBN(Guid bookId)
+    {
+        BookInfo bookInfo = new();
+        try
+        {
+            if (Guid.Empty == bookId)
+                throw new InvalidOperationException("Ingen bok med angivet " + nameof(bookId) + " hittades.");
+
+            bookInfo = _bookService.GetBookInfoByISBN(bookId);
+        }
+
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error: " + ex.Message);
+            AppTools.WaitForEnterKey();
+        }
+
+        return bookInfo;
+    }
+
 }

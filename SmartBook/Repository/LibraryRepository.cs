@@ -3,15 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SmartBook.Data;
 using SmartBook.Handlers;
 using SmartBook.Models;
 using SmartBook.Utilities;
 
-namespace SmartBook.Services
+namespace SmartBook.Repository
 {
-    public class LibraryService
+    public class LibraryRepository
     {
-        private LibraryHandler _libraryHandler = new();
+        private LibraryDataAccess _libraryDataAccess;
+
+        public LibraryRepository(LibraryDataAccess libraryDataAccess)
+        {
+            _libraryDataAccess = libraryDataAccess;
+        }
+
+        public LibraryRepository()
+        {
+
+        }
 
         public List<Book> GetBooks()
         {
@@ -19,7 +30,7 @@ namespace SmartBook.Services
 
             try
             {
-                bookList = _libraryHandler.GetAllBooks();
+                bookList = _libraryDataAccess.GetAllBooks();
             }
 
             catch (Exception ex)
@@ -37,7 +48,7 @@ namespace SmartBook.Services
 
             try
             {
-                libraryCardList = _libraryHandler.GetAllLibraryCards();
+                libraryCardList = _libraryDataAccess.GetAllLibraryCards();
             }
 
             catch (Exception ex)
@@ -47,7 +58,7 @@ namespace SmartBook.Services
             }
 
             return libraryCardList;
-           
+
         }
 
         public List<Loan> GetLoans()
@@ -56,7 +67,7 @@ namespace SmartBook.Services
 
             try
             {
-                loanList = _libraryHandler.GetAllLoans();
+                loanList = _libraryDataAccess.GetAllLoans();
             }
 
             catch (Exception ex)
@@ -65,7 +76,7 @@ namespace SmartBook.Services
                 AppTools.WaitForEnterKey();
             }
 
-            return loanList;          
+            return loanList;
         }
 
         public List<User> GetUsers()
@@ -74,7 +85,7 @@ namespace SmartBook.Services
 
             try
             {
-                userList = _libraryHandler.GetAllUsers();
+                userList = _libraryDataAccess.GetAllUsers();
             }
 
             catch (Exception ex)
@@ -83,17 +94,16 @@ namespace SmartBook.Services
                 AppTools.WaitForEnterKey();
             }
 
-            return userList;           
+            return userList;
         }
 
-
-        public bool LoadDB()
+        public bool InitializeDataBase()
         {
-            bool dbSuccededLoading = false;
+            bool initializedDatabase = false;
             try
             {
-                _libraryHandler.LoadFromDB();
-                dbSuccededLoading = true;
+                _libraryDataAccess.InitializeDB();
+                initializedDatabase = true;
             }
 
             catch (Exception ex)
@@ -102,16 +112,16 @@ namespace SmartBook.Services
                 AppTools.WaitForEnterKey();
             }
 
-            return dbSuccededLoading;
-        }
+            return initializedDatabase;
+        }       
 
-        public bool SaveDB()
+        public bool SaveDataBase()
         {
-            bool dbSuccededSaving = false;
+            bool databaseSavedSuccessfully = false;
             try
             {
-                _libraryHandler.SaveToDB();
-                dbSuccededSaving = true;
+                _libraryDataAccess.SaveToDB();
+                databaseSavedSuccessfully = true;
             }
 
             catch (Exception ex)
@@ -120,7 +130,7 @@ namespace SmartBook.Services
                 AppTools.WaitForEnterKey();
             }
 
-            return dbSuccededSaving;
+            return databaseSavedSuccessfully;
         }
     }
 }

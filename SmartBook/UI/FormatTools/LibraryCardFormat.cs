@@ -7,13 +7,13 @@ using SmartBook.Enums;
 using SmartBook.Enums.Models;
 using SmartBook.Models;
 
-namespace SmartBook.Utilities.FormatTools;
+namespace SmartBook.UI.FormatTools;
 
 public static class LibraryCardFormat
 {
     public static string GetHeader()
     {      
-        string header = String.Format
+        string header = string.Format
         (
             "{0,-18}{1,-18}{2,-12}{3,-2}\n",
             "Kort nummer:", 
@@ -57,7 +57,7 @@ public static class LibraryCardFormat
     {
         string status = LibraryCardStatusExtensions.GetSwedishName(card.Status);     
 
-        string output = String.Format
+        string output = string.Format
         (
             "{0,-18}{1,-18}{2,-12}{3,-2}\n",
             card.CardNumber.ToString(), 

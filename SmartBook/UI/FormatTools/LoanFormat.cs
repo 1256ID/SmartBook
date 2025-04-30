@@ -7,7 +7,7 @@ using SmartBook.Enums.Models;
 using SmartBook.Models;
 using SmartBook.Services;
 
-namespace SmartBook.Utilities.FormatTools;
+namespace SmartBook.UI.FormatTools;
 
 public class LoanFormat
 {
@@ -19,7 +19,7 @@ public class LoanFormat
     {
         // ISBN, Titel, Hyrd av (namn), Lånekortsnummer:, Utlånatdatum:, Inlämningsdatum: Returdatum:,
 
-        string header = String.Format
+        string header = string.Format
         (
             "{0,-18}{1,-18}{2,-12}{3,-2}\n",
             "ISBN:",
@@ -75,7 +75,7 @@ public class LoanFormat
         var user = _userService.GetUser(loan.UserId);
         var book = _bookService.GetBookByISBN(loan.ISBN);
 
-        string output = String.Format
+        string output = string.Format
         (
             "{0,-18}{1,-18}{2,-12}{3,-2}\n",
             loan.ISBN.ToString(),

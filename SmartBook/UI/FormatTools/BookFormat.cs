@@ -7,13 +7,13 @@ using SmartBook.Models;
 using SmartBook.Enums;
 using SmartBook.Enums.Models;
 
-namespace SmartBook.Utilities.FormatTools;
+namespace SmartBook.UI.FormatTools;
 
 public static class BookFormat
 {
     public static string GetHeader()
     {
-        string header = String.Format
+        string header = string.Format
         (
             "{0,-18}{1,-18}{2,-12}{3,-2}{4, 12}\n",
             "ISBN:", 
@@ -67,7 +67,7 @@ public static class BookFormat
         var bookInfo = book.BookInfo;
         string status = BookStatusExtensions.GetSwedishName(book.Status);
 
-        string output = String.Format
+        string output = string.Format
         (
             "{0,-18}{1,-18}{2,-12}{3,-2}{4, -12}\n",
             bookInfo.ISBN, 

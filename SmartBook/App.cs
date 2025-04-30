@@ -1,16 +1,53 @@
-﻿using SmartBook.Utilities;
+﻿using SmartBook.Services;
+using SmartBook.UI;
+using SmartBook.Models;
+using SmartBook.Handlers;
+using SmartBook.Data;
+using SmartBook.Repository;
 
 namespace SmartBook;
 
 public class App
 {
-    static void Main()
+    private Library _library;
+    private BookHandler _bookHandler;
+
+
+    
+    
+    static void Run()
     {
         // Load in Database
+
+        var jsonDb = new JsonDatabase();
+        var dataAccess = new LibraryDataAccess(jsonDb); 
+        var repository = new LibraryRepository(dataAccess);
+
+        // Book
+
+        var bookService = new BookService(repository);
+        var bookHandler = new BookHandler(bookService);
+
+        // LibraryCard
+
+        var libraryCardService = new LibraryCardService(repository);
+        var libraryCardHandler = new LibraryCardHandler(libraryCardService);
+
+        // Loan
+
+        var loanService = new LoanService(repository);
+        var loanHandler = new LoanHandler(loanService);
+
+        // User
+
+        var userService = new UserService(repository);
+        var userHandler = new UserHandler(userService);
+
 
         // Starting variables
 
         MenuManager menuManager = new();
+        
         bool runningApp = true;
         int index = 0;
 

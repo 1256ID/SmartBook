@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using SmartBook.Enums.Models;
 using SmartBook.Handlers;
 using SmartBook.Models;
+using SmartBook.Repository;
 using SmartBook.Utilities;
 
 
@@ -14,92 +15,58 @@ namespace SmartBook.Services
 {
     public class LibraryCardService
     {
-        private LibraryCardHandler _libraryCardHandler = new();
-
-
-        public LibraryCard FindByCardNumber(Guid cardNumber)
+        private LibraryRepository _repository;
+        public LibraryCardService(LibraryRepository repository)
         {
-            LibraryCard card = new();
-            try
-            {
-                if (cardNumber == Guid.Empty)
-                    throw new ArgumentException("Guid (CardNumber) är tomt.");
-
-                card = _libraryCardHandler.GetByCardNumber(cardNumber);
-            }
-
-            catch (Exception ex) 
-            {
-                Console.WriteLine("Error: " + ex.Message);
-                AppTools.WaitForEnterKey();
-            }
-
-            return card;
-        }
-        public bool CreateLibraryCard(Guid userId)
-        {
-            bool libraryCardHasBeenCreated = false;
-            try
-            {
-                if (userId == Guid.Empty) 
-                    throw new ArgumentException("UserId är null");
-
-                LibraryCard libraryCard = new(userId);
-                libraryCard.UpdateStatus(LibraryCardStatus.Active);
-
-                _libraryCardHandler.Add(libraryCard);
-                libraryCardHasBeenCreated = true;
-
-            }
-            catch (Exception ex) 
-            {
-                Console.WriteLine("Error: " + ex.Message);
-                AppTools.WaitForEnterKey();
-            }
-            
-            return libraryCardHasBeenCreated;
+            _repository = repository;
         }
 
-        public bool EditStatus(Guid id, LibraryCardStatus newStatus)
+        private List<LibraryCard> LibraryCards => _repository.GetLibraryCards();
+
+        public LibraryCard GetByCardNumber(Guid cardNumber)
+            => LibraryCards.FirstOrDefault(c => c.CardNumber == cardNumber)
+            ?? throw new InvalidOperationException("Inget lånekort med angivet " + nameof(cardNumber) + " hittades.");
+
+        public void Add(LibraryCard card)
         {
-            bool libraryCardHasBeenEdited = false;
-            try
-            {
-                if (id == Guid.Empty)
-                    throw new ArgumentException("Guid är tom.");
-
-                _libraryCardHandler.EditStatus(id, newStatus);
-                libraryCardHasBeenEdited = true;
-            }
-
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error: " + ex.Message);
-                AppTools.WaitForEnterKey();
-            }
-
-            return libraryCardHasBeenEdited;
+            LibraryCards.Add(card);
         }
 
-        public bool Remove(Guid id)
+        public void EditStatus(Guid id, LibraryCardStatus newStatus)
         {
-            bool libraryCardHasBeenRemoved = false;
-            try
-            {
-                if (id == Guid.Empty)
-                    throw new ArgumentNullException("Guid är tom.");
+            var targetLibraryCard
+                = LibraryCards
+                    .Where(c => c.Id == id)
+                    .FirstOrDefault()
 
-                _libraryCardHandler.Remove(id);
-                libraryCardHasBeenRemoved = true;
-            }
+                ?? throw new ArgumentNullException
+                    (
+                        nameof(id),
+                        "Objektet 'LibraryCard' innehållandes '" + nameof(id) + "' returnerade null."
+                    );
 
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error: " + ex.Message);
-                AppTools.WaitForEnterKey();
-            }
-
-            return libraryCardHasBeenRemoved;
+            targetLibraryCard.SetStatus(newStatus);
         }
+
+        public void Remove(Guid id)
+        {
+            if (id == Guid.Empty)
+                throw new ArgumentNullException(nameof(id), "Guid '" + nameof(id) + "' är tomt.");
+
+            var targetLibraryCard = LibraryCards.FirstOrDefault(c => c.Id == id) ??
+                throw new ArgumentNullException
+                (
+                    nameof(id),
+                    "Objektet 'LibraryCard' innehållandes '" + nameof(id) + "' returnerade null."
+                );
+
+            LibraryCards.Remove(targetLibraryCard);
+        }
+
+        public bool LibraryCardExists(Guid libraryCardId)
+        {
+            return LibraryCards.Exists(c => c.Id.Equals(libraryCardId));
+        }
+
     }
 }

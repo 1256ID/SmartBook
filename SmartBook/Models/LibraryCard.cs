@@ -25,12 +25,16 @@ public class LibraryCard
         UserId = userId;
     }
 
-    public void UpdateStatus(LibraryCardStatus newStatus)
+    public void SetStatus(LibraryCardStatus status)
     {
-        if (!Enum.IsDefined(newStatus))
-            throw new ArgumentException("Lånekorts status innehåller ogiltigt format.");
+        ValidateStatus(status);
+        Status = status;        
+    }
 
-        Status = newStatus;        
+    public void ValidateStatus(LibraryCardStatus status)
+    {
+        if (!Enum.IsDefined(status))
+            throw new ArgumentException("Lånekorts status innehåller ogiltigt format.", nameof(status));
     }
 
 }

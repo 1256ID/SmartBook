@@ -7,7 +7,7 @@ using SmartBook.Enums.Models;
 using SmartBook.Models;
 using SmartBook.Services;
 
-namespace SmartBook.Utilities.FormatTools;
+namespace SmartBook.UI.FormatTools;
 
 public static class UserFormat
 {      
@@ -15,7 +15,7 @@ public static class UserFormat
     {
         // Namn, Email, Har användare lånekort?
 
-        string header = String.Format
+        string header = string.Format
         (
             "{0,-18}{1,-18}{2,-12}\n",
             "Namn:",
@@ -52,7 +52,7 @@ public static class UserFormat
     public static string FormatRow(User user)
     {
         bool userHasLibraryCard = user.LibraryCard != null;
-        string output = String.Format
+        string output = string.Format
         (
             "{0,-18}{1,-18}{2,-12}\n",
             user.Name,
