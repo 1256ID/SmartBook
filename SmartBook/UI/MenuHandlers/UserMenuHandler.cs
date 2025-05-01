@@ -30,8 +30,8 @@ namespace SmartBook.UI.MenuHandlers
             _userContext = userContext;
         }
         public void SelectOrCreateUser()
-        {           
-            if (_userHandler.AnyUserExists()) 
+        {
+            if (_userHandler.AnyUserExists())
             {
                 List<User> users = _userHandler.GetUsers();
                 string[] userArray = new string[users.Count];
@@ -61,7 +61,7 @@ namespace SmartBook.UI.MenuHandlers
                     try
                     {
                         Console.Clear();
-                        Console.WriteLine("Var vänlig och skapa en användare.\n");
+                        Console.WriteLine("Var vänlig och skapa en ny användare.\n");
                         Console.Write("Ange namn: ");
                         string? name = Console.ReadLine();
 
@@ -75,8 +75,9 @@ namespace SmartBook.UI.MenuHandlers
 
                         Console.Clear();
                         Console.WriteLine("Tillåtet format: namn@domän.se");
+                        Console.WriteLine("Använd ett mellanslag istället för @");
                         Console.Write("\nAnge email: ");
-                        string? email = Console.ReadLine();
+                        string? email = Console.ReadLine()?.Replace(" ", "@"); ;
 
                         if (string.IsNullOrEmpty(email))
                         {
@@ -85,22 +86,31 @@ namespace SmartBook.UI.MenuHandlers
                             AppTools.WaitForEnterKey();
                         }
 
-                        if (name != null && email != null) 
-                        {                            
-                            User user = _userHandler.CreateUser(name, email);
-                            _userContext.SelectUser(user);
-                            userIsCreated = true;
+
+
+                        if (name != null && email != null)
+                        {
+                            (User user, userIsCreated) = _userHandler.CreateUser(name, email);
+                            if (userIsCreated) 
+                                _userContext.SelectUser(user);
+
+                            else
+                            {
+                                Console.WriteLine("Det gick inte att skapa användarkontot, var vänlig och försök igen.");
+                                AppTools.WaitForEnterKey();
+                            }
+                            
                         }
-                        
+
                     }
 
-                    catch 
+                    catch
                     {
                         Console.WriteLine("Ogiltig inmatning, försök igen.");
                         AppTools.WaitForEnterKey();
-                    }            
+                    }
 
-                } while (!userIsCreated);               
+                } while (!userIsCreated);
             }
         }
 

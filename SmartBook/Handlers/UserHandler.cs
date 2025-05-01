@@ -16,7 +16,7 @@ namespace SmartBook.Handlers
 
         private readonly UserService _userService;
         private readonly UserContext _userContext;
-        public UserHandler(UserService userService, UserContext userContext) 
+        public UserHandler(UserService userService, UserContext userContext)
         {
             _userService = userService;
             _userContext = userContext;
@@ -64,15 +64,19 @@ namespace SmartBook.Handlers
             return users;
         }
 
-        public User CreateUser(string name, string email)
+        public (User, bool) CreateUser(string name, string email)
         {
+            bool userIsCreated = false;
             User user = new();
             try
             {
-                ArgumentException.ThrowIfNullOrWhiteSpace(name);
-                ArgumentException.ThrowIfNullOrWhiteSpace(email);
+                if (string.IsNullOrEmpty(name)) 
+                    throw new ArgumentNullException(name, nameof(name) + "är null eller tomt.");
+                if (string.IsNullOrEmpty(email))
+                    throw new ArgumentNullException(email, nameof(email) + "är null eller tomt.");
                 user = new(name, email);
-                _userService.AddUser(user);              
+                _userService.AddUser(user);
+                userIsCreated = true;
             }
 
             catch (Exception ex)
@@ -81,10 +85,10 @@ namespace SmartBook.Handlers
                 AppTools.WaitForEnterKey();
             }
 
-            return user;
+            return (user, userIsCreated);
         }
 
-       
+
 
         public bool EditUser()
         {
@@ -104,7 +108,7 @@ namespace SmartBook.Handlers
                 _userService.Remove(user);
             }
 
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 Console.WriteLine("Error: " + ex.Message);
                 AppTools.WaitForEnterKey();
@@ -137,7 +141,7 @@ namespace SmartBook.Handlers
 
             return doesUserExist;
 
-        }  
+        }
 
         public bool AnyUserExists()
         {

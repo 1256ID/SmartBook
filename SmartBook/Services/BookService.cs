@@ -13,7 +13,7 @@ namespace SmartBook.Services
 {
     public class BookService
     {
-        
+
         private readonly LibraryRepository _repository;
         private readonly string bookIsNull = "Objektet 'Book' med angiven parameter returnerade null.";
 
@@ -23,7 +23,7 @@ namespace SmartBook.Services
         }
 
         //////////////////////////////////////////////     GET methods     ////////////////////////////////////////////////////
-        
+
         public Book GetById(Guid bookId)
             => _repository.GetBooks().FirstOrDefault(c => c.Id == bookId)
             ?? throw new InvalidOperationException("Ingen bok med angivet " + nameof(bookId) + " hittades.");

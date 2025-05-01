@@ -9,7 +9,7 @@ namespace SmartBook.Session
 {
     public class UserContext
     {
-        public User? SelectedUser { get; set; }             
+        public User? SelectedUser { get; set; }
 
         public bool SelectUser(User user)
         {
@@ -21,7 +21,7 @@ namespace SmartBook.Session
                 selected = true;
             }
 
-            catch(Exception ex) 
+            catch (Exception ex)
             {
                 Console.WriteLine("Error: " + ex.Message);
             }

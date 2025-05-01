@@ -12,9 +12,9 @@ namespace SmartBook.Models;
 public class Book
 {
     public Guid Id { get; } = Guid.NewGuid();
-    public BookInfo BookInfo { get; private set; }
-    public BookStatus Status { get; private set; }
-    public BookCondition Condition { get; private set; }
+    public BookInfo BookInfo { get; set; }
+    public BookStatus Status { get; set; }
+    public BookCondition Condition { get; set; }
     public DateTime AddedDate { get; } = DateTime.Now;
 
     public Book()
@@ -32,7 +32,7 @@ public class Book
     }
 
     public void SetConditon(BookCondition condition)
-    {        
+    {
         ValidateConditon(condition);
         Condition = condition;
     }
@@ -40,14 +40,14 @@ public class Book
     private void ValidateStatus(BookStatus status)
     {
         if (!Enum.IsDefined(status))
-            throw new ArgumentException("Bokstatus innehåller felaktivt format.", nameof(status));  
+            throw new ArgumentException("Bokstatus innehåller felaktivt format.", nameof(status));
     }
 
     private void ValidateConditon(BookCondition condition)
     {
         if (!Enum.IsDefined(condition))
-            throw new ArgumentException("Bokskick innehåller felaktivt format.", nameof(condition));       
+            throw new ArgumentException("Bokskick innehåller felaktivt format.", nameof(condition));
     }
 
-    
+
 }

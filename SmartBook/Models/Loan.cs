@@ -7,18 +7,18 @@ using System.Threading.Tasks;
 namespace SmartBook.Models;
 public class Loan
 {
-    public Guid Id { get; } = Guid.NewGuid();  
-    public Guid ISBN { get; private set; }
-    public Guid CardNumber { get; private set; }    
-    public Guid BookId { get; private set; }
-    public Guid UserId { get; private set; }
-    public DateTime LoanDate { get; private set; } = DateTime.Now;
-    public DateTime DueDate { get; private set; }
-    public DateTime? ReturnDate { get; private set; } = null;
+    public Guid Id { get; } = Guid.NewGuid();
+    public Guid ISBN { get; set; }
+    public Guid CardNumber { get; set; }
+    public Guid BookId { get; set; }
+    public Guid UserId { get; set; }
+    public DateTime LoanDate { get; set; } = DateTime.Now;
+    public DateTime DueDate { get; set; }
+    public DateTime? ReturnDate { get; set; } = null;
 
     public Loan()
     {
-        
+
     }
 
     public Loan(Guid isbn, Guid cardNumber, Guid bookId, Guid userId)
@@ -42,8 +42,8 @@ public class Loan
     }
 
     private void ValidateGuid(Guid guid, string paramName)
-    {    
-        if (guid == Guid.Empty) 
+    {
+        if (guid == Guid.Empty)
             throw new ArgumentException($"Guid '{paramName}' är tomt.", paramName);
     }
 }

@@ -64,7 +64,8 @@ public class LoanFormat
             "Utfärdsdatum: " +          card.IssuedDate.ToString("yyyy-MM-dd"),
             "Utgångsdatum: " +          card.ExpiryDate.ToString("yyyy-MM-dd"),
             "Lånekortsstatus: " +       status,
-            "Gå tillbaka till förgående meny"
+
+            "\nGå tillbaka till förgående meny"
         ];
 
         return outputArray;

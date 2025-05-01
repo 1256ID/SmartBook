@@ -12,48 +12,69 @@ using System.IO.Enumeration;
 namespace SmartBook.Data
 {
     public class JsonDatabase
-    {            
+    {
         // Vad jag behöver: En lista för varje typ som sedan ska konverteras till/från JSON.
 
-        private readonly string FilePath = 
-            Path.GetTempPath() +
-                @"\SmartBook\" + 
-                "library" + 
-                ".json";
+        private readonly string _filePath = 
+            Path.Combine
+            (
+                Path.GetTempPath(),
+                "SmartBook",
+                "library.json"
+            );
 
         public JsonDatabase()
         {
+            string tempPath = Path.Combine(Path.GetTempPath(), "SmartBook");
 
-        }
-
-        public void Initialize() 
-        {
-            SeedData SeedData = new();
-            if (!File.Exists(FilePath))
+            if (!Directory.Exists(tempPath))
             {
-                string seedData = SeedData.LoadData();
-                seedData = JsonSerializer.Serialize(seedData);
-                File.WriteAllText(FilePath, seedData);
+                Directory.CreateDirectory(tempPath);
             }
-        }
+
+            _filePath = Path.Combine(tempPath, "library.json");
+        }    
 
         public Library Load()
         {
-            string jsonFile = File.ReadAllText(FilePath);
 
-            if (String.IsNullOrEmpty(jsonFile))
-                throw new ArgumentException("library.json är null eller tom.");
-            
-            Library library = JsonSerializer.Deserialize<Library>(jsonFile) ?? throw new ArgumentNullException("library.json är null eller korrupt.");
+            try
+            {
+                if (!File.Exists(_filePath))
+                {
+                    Console.WriteLine("Fil saknas. Initierar ny databas med testdata...");
+                    var seedData = SeedData.GetLibrary();                                  
+                    Save(seedData);
+                    return seedData;
+                }
 
-            return library;
+                string jsonFile = File.ReadAllText(_filePath);
+
+                if (string.IsNullOrWhiteSpace(jsonFile))
+                    throw new InvalidDataException("Innehållet i library.json är tomt.");
+
+                var library = JsonSerializer.Deserialize<Library>(jsonFile);
+
+                return library ?? throw new JsonException("Kunde inte deserialisera library.json – formatet kan vara fel.");
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("Fel vid inläsning av biblioteket.", ex);
+            }
         }
 
         public void Save(Library library)
-        {                                                
-            string jsonFile = JsonSerializer.Serialize<Library>(library) ?? throw new ArgumentNullException("library är null");
-            File.WriteAllText(FilePath, jsonFile);                                      
+        {
+            if (library == null)
+                throw new ArgumentNullException(nameof(library), "Library är null.");
+
+            string jsonFile = JsonSerializer.Serialize(library, new JsonSerializerOptions
+            {
+                WriteIndented = true
+            });
+
+            File.WriteAllText(_filePath, jsonFile);
         }
-    
+
     }
 }

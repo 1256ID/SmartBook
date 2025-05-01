@@ -10,25 +10,25 @@ namespace SmartBook.Models;
 public class LibraryCard
 {
     public Guid Id { get; } = Guid.NewGuid();
-    public Guid UserId { get; private set; }
+    public Guid UserId { get; set; }
     public Guid CardNumber { get; } = Guid.NewGuid();
     public DateTime IssuedDate { get; } = DateTime.Today;
     public DateTime ExpiryDate { get; } = DateTime.Today.AddYears(1);
-    public LibraryCardStatus Status { get; private set; }
+    public LibraryCardStatus Status { get; set; }
 
     public LibraryCard()
     {
 
     }
-    public LibraryCard (Guid userId)
-    {        
+    public LibraryCard(Guid userId)
+    {
         UserId = userId;
     }
 
     public void SetStatus(LibraryCardStatus status)
     {
         ValidateStatus(status);
-        Status = status;        
+        Status = status;
     }
 
     private void ValidateStatus(LibraryCardStatus status)

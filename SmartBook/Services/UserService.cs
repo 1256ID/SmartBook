@@ -42,16 +42,14 @@ public class UserService
         return GetUsers().Any(c => c.Id == guid);
     }
 
-   
-
 
     public bool AnyUserExists()
     {
-        return GetUsers().Count != 0;
+        return GetUsers().Any();
     }
 
-    
+
 
 }
 
-   
+

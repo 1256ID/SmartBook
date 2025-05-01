@@ -6,11 +6,12 @@ using SmartBook.Data;
 using SmartBook.Repository;
 using SmartBook.Session;
 using SmartBook.UI.MenuHandlers;
+using SmartBook.Utilities;
 
 namespace SmartBook;
 
 public class App
-{ 
+{
     static void Main()
     {
 
@@ -41,7 +42,7 @@ public class App
         var menuManager = new MenuManager(bookHandler, libraryCardHandler, loanHandler, userHandler, userContext);
         var userManager = new UserMenuHandler(bookHandler, libraryCardHandler, loanHandler, userHandler, userContext);
 
-        // Välj eller skapa användare.
+        // Välj eller skapa användare.     
 
         userManager.SelectOrCreateUser();
 
@@ -55,34 +56,33 @@ public class App
             index = Menu.Display
                 (
                     "Ivans Bibliotek",
-                    [                                               
-                        "Hantera användare",                     
+                    [                       
                         "Hantera böcker",
+                        "Hantera användare",
                         "Hantera lånekort",
                         "Avsluta programmet"
 
                     ], index
                 );
 
-
             switch (index)
             {
 
                 case 0:
-                    menuManager.ManageBooks();
-                break;
+                    menuManager.ManageBooks();                  
+                    break;
 
                 case 1:
-                    menuManager.ManageLibraryCards();
-                break;
+                    menuManager.ManageUsers();                                   
+                    break;
 
                 case 2:
-                    menuManager.ManageUsers();
-                break;
+                    menuManager.ManageLibraryCards();
+                    break;
 
                 case 3:
                     runningApp = false;
-                break;
+                    break;
 
             }
 

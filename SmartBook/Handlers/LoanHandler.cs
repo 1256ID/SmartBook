@@ -67,7 +67,7 @@ namespace SmartBook.Handlers
 
         public bool CreateLoan(Book book, Guid userId, Guid cardNumber)
         {
-            bool loanIsCreated = false;      
+            bool loanIsCreated = false;
 
             try
             {
@@ -78,17 +78,17 @@ namespace SmartBook.Handlers
                     throw new ArgumentException("Guid '" + nameof(cardNumber) + "' är tomt.", nameof(cardNumber));
 
                 User? user = _userContext.SelectedUser;
-                
+
                 if (user != null)
                 {
-                    
+
                     Loan loan = new(book.BookInfo.ISBN, cardNumber, book.Id, user.Id);
                     loanIsCreated = _loanService.Add(loan);
                 }
-                
+
             }
 
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 Console.WriteLine("Error: " + ex.Message);
                 AppTools.WaitForEnterKey();
@@ -97,7 +97,7 @@ namespace SmartBook.Handlers
             return loanIsCreated;
         }
 
-        
+
 
     }
 }

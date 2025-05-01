@@ -1,0 +1,207 @@
+﻿{
+    "Books": [
+        {
+            "Id": "1",
+            "Status": 0,
+            "Condition": 0,
+            "BookInfo": {
+                "Title": "Testbok 1",
+                "Author": "Författare A",
+                "Genre": 0
+            }
+        },
+        {
+            "Id": "2",
+            "Status": 0,
+            "Condition": 1,
+            "BookInfo": {
+                "Title": "Testbok 2",
+                "Author": "Författare B",
+                "Genre": 1
+            }
+        },
+        {
+            "Id": "3",
+            "Status": 0,
+            "Condition": 2,
+            "BookInfo": {
+                "Title": "Testbok 3",
+                "Author": "Författare C",
+                "Genre": 2
+            }
+        },
+        {
+            "Id": "4",
+            "Status": 0,
+            "Condition": 1,
+            "BookInfo": {
+                "Title": "Testbok 4",
+                "Author": "Författare D",
+                "Genre": 3
+            }
+        },
+        {
+            "Id": "5",
+            "Status": 0,
+            "Condition": 0,
+            "BookInfo": {
+                "Title": "Testbok 5",
+                "Author": "Författare E",
+                "Genre": 0
+            }
+        },
+        {
+            "Id": "6",
+            "Status": 0,
+            "Condition": 2,
+            "BookInfo": {
+                "Title": "Testbok 6",
+                "Author": "Författare F",
+                "Genre": 1
+            }
+        },
+        {
+            "Id": "7",
+            "Status": 0,
+            "Condition": 0,
+            "BookInfo": {
+                "Title": "Testbok 7",
+                "Author": "Författare G",
+                "Genre": 2
+            }
+        },
+        {
+            "Id": "8",
+            "Status": 0,
+            "Condition": 1,
+            "BookInfo": {
+                "Title": "Testbok 8",
+                "Author": "Författare H",
+                "Genre": 3
+            }
+        },
+        {
+            "Id": "9",
+            "Status": 0,
+            "Condition": 0,
+            "BookInfo": {
+                "Title": "Testbok 9",
+                "Author": "Författare I",
+                "Genre": 0
+            }
+        },
+        {
+            "Id": "10",
+            "Status": 0,
+            "Condition": 2,
+            "BookInfo": {
+                "Title": "Testbok 10",
+                "Author": "Författare J",
+                "Genre": 1
+            }
+        },
+        {
+            "Id": "11",
+            "Status": 0,
+            "Condition": 1,
+            "BookInfo": {
+                "Title": "Testbok 11",
+                "Author": "Författare K",
+                "Genre": 2
+            }
+        },
+        {
+            "Id": "12",
+            "Status": 0,
+            "Condition": 0,
+            "BookInfo": {
+                "Title": "Testbok 12",
+                "Author": "Författare L",
+                "Genre": 3
+            }
+        },
+        {
+            "Id": "13",
+            "Status": 0,
+            "Condition": 2,
+            "BookInfo": {
+                "Title": "Testbok 13",
+                "Author": "Författare M",
+                "Genre": 0
+            }
+        },
+        {
+            "Id": "14",
+            "Status": 0,
+            "Condition": 1,
+            "BookInfo": {
+                "Title": "Testbok 14",
+                "Author": "Författare N",
+                "Genre": 1
+            }
+        },
+        {
+            "Id": "15",
+            "Status": 0,
+            "Condition": 0,
+            "BookInfo": {
+                "Title": "Testbok 15",
+                "Author": "Författare O",
+                "Genre": 2
+            }
+        },
+        {
+            "Id": "16",
+            "Status": 0,
+            "Condition": 1,
+            "BookInfo": {
+                "Title": "Testbok 16",
+                "Author": "Författare P",
+                "Genre": 3
+            }
+        },
+        {
+            "Id": "17",
+            "Status": 0,
+            "Condition": 0,
+            "BookInfo": {
+                "Title": "Testbok 17",
+                "Author": "Författare Q",
+                "Genre": 0
+            }
+        },
+        {
+            "Id": "18",
+            "Status": 0,
+            "Condition": 2,
+            "BookInfo": {
+                "Title": "Testbok 18",
+                "Author": "Författare R",
+                "Genre": 1
+            }
+        },
+        {
+            "Id": "19",
+            "Status": 0,
+            "Condition": 1,
+            "BookInfo": {
+                "Title": "Testbok 19",
+                "Author": "Författare S",
+                "Genre": 2
+            }
+        },
+        {
+            "Id": "20",
+            "Status": 0,
+            "Condition": 0,
+            "BookInfo": {
+                "Title": "Testbok 20",
+                "Author": "Författare T",
+                "Genre": 3
+            }
+        }
+    ],
+    "Users": [],
+    "LibraryCards": [],
+    "Loans": []
+}

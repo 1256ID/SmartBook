@@ -23,7 +23,7 @@ namespace SmartBook.Services
             ?? throw new InvalidOperationException("Inget boklån med angivet " + nameof(loanId) + " hittades.");
         public List<Loan> GetLoans() => _repository.GetLoans();
 
-        
+
         public bool Add(Loan loan)
         {
             _repository.Add(loan);

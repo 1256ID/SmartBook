@@ -26,7 +26,7 @@ public class Menu
     */
 
     public static int Display(string menuTitle, string[] arr, int index)
-    {       
+    {
         bool indexIsChosen = false;
         int maxAmountOfChars = arr.Max(arr => arr.Length) + 7;
         string menuOutliners = "";
@@ -104,21 +104,21 @@ public class Menu
                     {
                         index--;
                     }
-                break;
+                    break;
 
                 case ConsoleKey.DownArrow:
                     if (index < arr.Length - 1)
                     {
                         index++;
                     }
-                break;
+                    break;
 
                 case ConsoleKey.Enter:
                     if (index < arr.Length)
                     {
                         indexIsChosen = true;
                     }
-                break;
+                    break;
 
 
                 default:
@@ -130,7 +130,7 @@ public class Menu
                             continueText
                         );
                     Console.ReadKey();
-                break;
+                    break;
             }
         }
 

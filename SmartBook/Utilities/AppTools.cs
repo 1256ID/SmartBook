@@ -10,7 +10,7 @@ using SmartBook.Enums.Models;
 namespace SmartBook.Utilities
 {
     public static class AppTools
-    {         
+    {
         public static void WaitForEnterKey()
         {
             while (true)
@@ -39,7 +39,7 @@ namespace SmartBook.Utilities
                 {
                     Console.Clear();
                     Console.Write(variableName);
-                    string ? input = Console.ReadLine();
+                    string? input = Console.ReadLine();
                     if (string.IsNullOrEmpty(input))
                     {
                         Console.WriteLine("Inmatningen får inte vara tom.\n\n");

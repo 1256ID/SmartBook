@@ -10,10 +10,10 @@ namespace SmartBook.Models;
 public class BookInfo
 {
     public Guid Id { get; } = Guid.NewGuid();
-    public Guid ISBN { get; private set; } = Guid.NewGuid();
-    public string Title { get; private set; }
-    public string Author { get; private set; }
-    public BookGenre Genre { get; private set; }
+    public Guid ISBN { get; set; } = Guid.NewGuid();
+    public string Title { get; set; }
+    public string Author { get; set; }
+    public BookGenre Genre { get; set; }
 
     public BookInfo()
     {
@@ -23,11 +23,11 @@ public class BookInfo
     {
         ValidateTitle(title);
         ValidateAuthor(author);
-               
+
         Title = title;
         Author = author;
     }
-   
+
 
     public void SetTitle(string title)
     {
@@ -63,7 +63,7 @@ public class BookInfo
 
     }
     private void ValidateAuthor(string author)
-    {      
+    {
         if (string.IsNullOrWhiteSpace(author))
             throw new ArgumentException("Författare är null eller tom.", nameof(author));
     }

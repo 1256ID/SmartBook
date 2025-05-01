@@ -7,7 +7,7 @@ using SmartBook.Session;
 
 namespace SmartBook.Handlers
 {
-    public class LibraryCardHandler 
+    public class LibraryCardHandler
     {
         private readonly LibraryCardService _libraryCardService;
         private readonly UserContext _userContext;
@@ -186,6 +186,6 @@ namespace SmartBook.Handlers
             return exists;
         }
 
-        
+
     }
 }

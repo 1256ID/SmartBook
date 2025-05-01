@@ -20,7 +20,7 @@ public class MenuManager
     private readonly UserHandler _userHandler;
 
     private readonly UserContext _userContext;
-    
+
     public MenuManager(BookHandler bookHandler, LibraryCardHandler libraryCardHandler, LoanHandler loanHandler, UserHandler userHandler, UserContext userContext)
     {
         _bookHandler = bookHandler;
@@ -29,21 +29,21 @@ public class MenuManager
         _userHandler = userHandler;
         _userContext = userContext;
     }
-    public void ManageBooks() 
+    public void ManageBooks()
     {
         BookMenuHandler bookMenuHandler = new(_bookHandler, _libraryCardHandler, _loanHandler, _userHandler, _userContext);
         bool managingBooks = true;
         int index = 0;
 
         do
-        {           
+        {
             index = Menu.Display
                 (
                     "Böcker",
                     [
                         "Sök",
                         "Lägg till",
-                        "Visa boklista",                        
+                        "Visa boklista",
                         "Gå tillbaka till förgående meny"
                     ], index
                 );
@@ -52,11 +52,11 @@ public class MenuManager
             {
                 case 0:
                     bookMenuHandler.SearchForBook();
-                break;
-                    
+                    break;
+
                 case 1:
                     bookMenuHandler.AddBook();
-                break;
+                    break;
 
                 case 2:
                     bookMenuHandler.ListBooks();
@@ -64,7 +64,7 @@ public class MenuManager
 
                 case 3:
                     managingBooks = false;
-                break;
+                    break;
 
             }
 

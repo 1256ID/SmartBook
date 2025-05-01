@@ -57,7 +57,8 @@ public static class BookFormat
             "Skick: " +             condition,
             "Tillgänglighet: " +    status,
             "Tillagt datum: " +     book.AddedDate.ToString(),
-            "Gå tillbaka till förgående meny"
+
+            "\nGå tillbaka till förgående meny"
         ];
 
         return outputArray;

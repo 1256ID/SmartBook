@@ -22,7 +22,7 @@ namespace SmartBook.UI.MenuHandlers
 
         private readonly UserContext _userContext;
 
-        public BookMenuHandler(BookHandler bookHandler, LibraryCardHandler libraryCardHandler, LoanHandler loanHandler, UserHandler userHandler, UserContext userContext) 
+        public BookMenuHandler(BookHandler bookHandler, LibraryCardHandler libraryCardHandler, LoanHandler loanHandler, UserHandler userHandler, UserContext userContext)
         {
             _bookHandler = bookHandler;
             _libraryCardHandler = libraryCardHandler;
@@ -74,7 +74,7 @@ namespace SmartBook.UI.MenuHandlers
                         }
 
                         else
-                        {                          
+                        {
                             if (index == 0)
                             {
                                 if (_bookHandler.GetBooksByTitle(input).Count > 1)
@@ -87,7 +87,7 @@ namespace SmartBook.UI.MenuHandlers
                                 {
                                     book = _bookHandler.GetBookByTitle(input);
                                 }
-                                   
+
                                 input = "avbryt";
                             }
 
@@ -104,7 +104,7 @@ namespace SmartBook.UI.MenuHandlers
                                 {
                                     book = _bookHandler.GetBookByAuthor(input);
                                 }
-                                
+
                                 input = "avbryt";
                             }
 
@@ -145,7 +145,7 @@ namespace SmartBook.UI.MenuHandlers
         }
 
         public Book SelectBook(List<Book> books, string menuTitle)
-        {            
+        {
             string[] bookArray = FormatBooksAsArray(books);
             int index = 0;
             index = Menu.Display
@@ -153,14 +153,14 @@ namespace SmartBook.UI.MenuHandlers
                 menuTitle,
                 bookArray,
                 index
-            );         
+            );
 
             return books[index];
         }
 
 
         public void AddBook()
-        {           
+        {
             bool bookIsCreated = false;
 
             do
@@ -188,7 +188,7 @@ namespace SmartBook.UI.MenuHandlers
             int index = 0;
             bool view = true;
             string bookView = FormatTools.BookFormat.FormatDetailsAsString(book) + "\n";
-          
+
             do
             {
                 Console.Clear();
@@ -220,10 +220,10 @@ namespace SmartBook.UI.MenuHandlers
                         break;
 
                     case 3:
-                        view = false;                       
+                        view = false;
                         break;
                 }
-               
+
 
             } while (view);
         }
@@ -278,10 +278,10 @@ namespace SmartBook.UI.MenuHandlers
                     (
                         book.BookInfo.Title,
                         arrayOfDetails,
-                        index                                     
+                        index
                     );
-                
-                switch (index) 
+
+                switch (index)
                 {
                     case 0:
                         Console.Clear();
@@ -290,7 +290,7 @@ namespace SmartBook.UI.MenuHandlers
                         break;
 
                     case 1:
-                        book.BookInfo.SetTitle(AppTools.PromptUserForTextInput("Ange Titel: "));                       
+                        book.BookInfo.SetTitle(AppTools.PromptUserForTextInput("Ange Titel: "));
                         break;
 
                     case 2:
@@ -324,7 +324,7 @@ namespace SmartBook.UI.MenuHandlers
 
             } while (editing);
 
-            
+
         }
 
         public BookGenre SelectBookGenre()
@@ -381,7 +381,7 @@ namespace SmartBook.UI.MenuHandlers
             {
                 booksArray[index++] = BookFormat.FormatRow(book);
             }
-        
+
             return booksArray;
         }
 
@@ -400,7 +400,7 @@ namespace SmartBook.UI.MenuHandlers
         }
 
         public void ListBooks()
-        {         
+        {
             List<Book> books = _bookHandler.GetBooks();
 
             int index = Menu.Display
@@ -410,11 +410,11 @@ namespace SmartBook.UI.MenuHandlers
                     0
                 );
 
-            if (index != books.Count + 1)
+            if (index != books.Count + 1 && books.Count != 0)
             {
                 ViewBook(books[index]);
             }
 
-        }        
+        }
     }
 }

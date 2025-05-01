@@ -43,7 +43,8 @@ public static class UserFormat
         [
             "Namn: " +      user.Name,
             "Email: " +     user.Email,
-            "Gå tillbaka till förgående meny"
+
+            "\nGå tillbaka till förgående meny"
         ];
 
         return outputArray;
