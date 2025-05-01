@@ -4,50 +4,48 @@ using SmartBook.Models;
 using SmartBook.Handlers;
 using SmartBook.Data;
 using SmartBook.Repository;
+using SmartBook.Session;
+using SmartBook.UI.MenuHandlers;
 
 namespace SmartBook;
 
 public class App
-{
-    private Library _library;
-    private BookHandler _bookHandler;
-
-
-    
-    
+{ 
     static void Main()
     {
-        // Load in Database
+
+        // Ladda in JsonDB
 
         var jsonDb = new JsonDatabase();
-        var dataAccess = new LibraryDataAccess(jsonDb); 
+        var dataAccess = new LibraryDataAccess(jsonDb);
         var repository = new LibraryRepository(dataAccess);
 
-        // Book
+        var userContext = new UserContext();
+
+        // Services
 
         var bookService = new BookService(repository);
-        var bookHandler = new BookHandler(bookService);
-
-        // LibraryCard
-
         var libraryCardService = new LibraryCardService(repository);
-        var libraryCardHandler = new LibraryCardHandler(libraryCardService);
-
-        // Loan
-
         var loanService = new LoanService(repository);
-        var loanHandler = new LoanHandler(loanService);
-
-        // User
-
         var userService = new UserService(repository);
-        var userHandler = new UserHandler(userService);
 
-        MenuManager menuManager = new(bookHandler, libraryCardHandler, loanHandler, userHandler);
+        // Handlers
 
-        // Starting variables
+        var bookHandler = new BookHandler(bookService, userContext);
+        var libraryCardHandler = new LibraryCardHandler(libraryCardService, userContext);
+        var loanHandler = new LoanHandler(loanService, userContext);
+        var userHandler = new UserHandler(userService, userContext);
 
+        // Menu
 
+        var menuManager = new MenuManager(bookHandler, libraryCardHandler, loanHandler, userHandler, userContext);
+        var userManager = new UserMenuHandler(bookHandler, libraryCardHandler, loanHandler, userHandler, userContext);
+
+        // Välj eller skapa användare.
+
+        userManager.SelectOrCreateUser();
+
+        // Starting variablar
 
         bool runningApp = true;
         int index = 0;

@@ -41,12 +41,9 @@ public class Loan
         ReturnDate = DateTime.Now;
     }
 
-    public void ValidateGuid(Guid guid, string paramName)
+    private void ValidateGuid(Guid guid, string paramName)
     {    
         if (guid == Guid.Empty) 
             throw new ArgumentException($"Guid '{paramName}' är tomt.", paramName);
     }
-
-  
-
 }

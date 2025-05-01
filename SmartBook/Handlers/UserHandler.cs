@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SmartBook.Models;
 using SmartBook.Services;
+using SmartBook.Session;
 using SmartBook.Utilities;
 
 namespace SmartBook.Handlers
@@ -13,10 +14,12 @@ namespace SmartBook.Handlers
     public class UserHandler
     {
 
-        private UserService _userService;
-        public UserHandler(UserService userService) 
+        private readonly UserService _userService;
+        private readonly UserContext _userContext;
+        public UserHandler(UserService userService, UserContext userContext) 
         {
             _userService = userService;
+            _userContext = userContext;
         }
 
         public User GetUser(Guid userId)
@@ -61,25 +64,39 @@ namespace SmartBook.Handlers
             return users;
         }
 
-        public bool AddUser()
+        public User CreateUser(string name, string email)
         {
-            bool wasAdded = false;
+            User user = new();
+            try
+            {
+                ArgumentException.ThrowIfNullOrWhiteSpace(name);
+                ArgumentException.ThrowIfNullOrWhiteSpace(email);
+                user = new(name, email);
+                _userService.AddUser(user);              
+            }
 
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+                AppTools.WaitForEnterKey();
+            }
 
-            return wasAdded;
+            return user;
         }
+
+       
 
         public bool EditUser()
         {
-            bool wasEdited = false;
+            bool isUserEdited = false;
 
 
-            return wasEdited;
+            return isUserEdited;
         }
 
         public bool RemoveUser(User user)
         {
-            bool isRemoved = false;
+            bool isUserRemoved = false;
 
             try
             {
@@ -94,12 +111,12 @@ namespace SmartBook.Handlers
             }
 
 
-            return isRemoved;
+            return isUserRemoved;
         }
 
         public bool UserExists(Guid userId)
         {
-            bool exists = false;
+            bool doesUserExist = false;
             try
             {
                 if (userId == Guid.Empty)
@@ -109,7 +126,7 @@ namespace SmartBook.Handlers
                         nameof(userId)
                     );
 
-                exists = _userService.Exists(userId);
+                doesUserExist = _userService.Exists(userId);
             }
 
             catch (Exception ex)
@@ -118,34 +135,9 @@ namespace SmartBook.Handlers
                 AppTools.WaitForEnterKey();
             }
 
-            return exists;
+            return doesUserExist;
 
-        }
-
-        public bool UserHasLibraryCard(Guid userId)
-        {
-            bool hasLibraryCard = false;
-
-            try
-            {
-                if (userId == Guid.Empty)
-                    throw new ArgumentException
-                   (
-                       "Guid '" + nameof(userId) + "' är tomt.",
-                       nameof(userId)
-                   );
-
-                hasLibraryCard = _userService.UserHasLibraryCard(userId);
-            }
-
-            catch (Exception ex) 
-            {
-                Console.WriteLine("Error: " + ex.Message);
-                AppTools.WaitForEnterKey();
-            }
-
-            return hasLibraryCard;
-        }
+        }  
 
         public bool AnyUserExists()
         {

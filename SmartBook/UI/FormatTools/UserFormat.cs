@@ -13,8 +13,7 @@ public static class UserFormat
 {      
     public static string GetHeader()
     {
-        // Namn, Email, Har användare lånekort?
-
+        
         string header = string.Format
         (
             "{0,-18}{1,-18}{2,-12}\n",
@@ -43,7 +42,8 @@ public static class UserFormat
         string[] outputArray =
         [
             "Namn: " +      user.Name,
-            "Email: " +     user.Email
+            "Email: " +     user.Email,
+            "Gå tillbaka till förgående meny"
         ];
 
         return outputArray;

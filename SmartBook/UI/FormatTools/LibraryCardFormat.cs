@@ -47,7 +47,8 @@ public static class LibraryCardFormat
             "Kort nummer: " +       card.CardNumber.ToString(),
             "Utfärdsdatum: " +      card.IssuedDate.ToString("yyyy-MM-dd"),
             "Utgångsdatum: " +      card.ExpiryDate.ToString("yyyy-MM-dd"),
-            "Lånekortsstatus: " +   status
+            "Lånekortsstatus: " +   status,
+            "Gå tillbaka till förgående meny"
         ];
 
         return outputArray;

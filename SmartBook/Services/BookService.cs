@@ -41,12 +41,26 @@ namespace SmartBook.Services
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        /////////////////////////////////////////////     GET ALL methods     ///////////////////////////////////////////////////
+        public List<Book> GetBooksByTitle(string title)
+        {
+            return [.. _repository
+                .GetBooks()
+                .Where(b => b.BookInfo.Title.Equals(title))];
+        }
+
+        public List<Book> GetBooksByAuthor(string author)
+        {
+            return [.. _repository
+                .GetBooks()
+                .Where(b => b.BookInfo.Author.Equals(author))];
+        }
 
         ////////////////////////////////////////////////     Other methods     ////////////////////////////////////////////////
 
         public void Add(Book book) => _repository.Add(book);
 
-        public void Edit(Book book)
+        public Book Edit(Book book)
         {
             var targetBook
                 = _repository.GetBooks().FirstOrDefault(c => c.Id.Equals(book.Id))
@@ -70,6 +84,8 @@ namespace SmartBook.Services
             targetBook.BookInfo.SetTitle(bookInfo.Title);
             targetBook.BookInfo.SetAuthor(bookInfo.Author);
             targetBook.BookInfo.SetGenre(bookInfo.Genre);
+
+            return targetBook;
         }
 
         public void Remove(Guid isbn)
@@ -79,7 +95,7 @@ namespace SmartBook.Services
                 ?? throw new ArgumentNullException
                     (
                         nameof(isbn),
-            bookIsNull
+                        bookIsNull
                     );
 
             _repository.Remove(targetBook);
@@ -89,7 +105,6 @@ namespace SmartBook.Services
         {
             return _repository.GetBooks().Exists(c => c.BookInfo.ISBN.Equals(isbn));
         }
-      
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

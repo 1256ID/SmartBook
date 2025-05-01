@@ -5,7 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using SmartBook.Handlers;
 using SmartBook.Models;
+using SmartBook.Session;
 using SmartBook.Utilities;
+using SmartBook.UI.FormatTools;
+using System.ComponentModel;
+using SmartBook.Enums.Models;
 
 namespace SmartBook.UI.MenuHandlers
 {
@@ -15,12 +19,16 @@ namespace SmartBook.UI.MenuHandlers
         private readonly LibraryCardHandler _libraryCardHandler;
         private readonly LoanHandler _loanHandler;
         private readonly UserHandler _userHandler;
-        public BookMenuHandler(BookHandler bookHandler, LibraryCardHandler libraryCardHandler, LoanHandler loanHandler, UserHandler userHandler) 
+
+        private readonly UserContext _userContext;
+
+        public BookMenuHandler(BookHandler bookHandler, LibraryCardHandler libraryCardHandler, LoanHandler loanHandler, UserHandler userHandler, UserContext userContext) 
         {
             _bookHandler = bookHandler;
             _libraryCardHandler = libraryCardHandler;
             _loanHandler = loanHandler;
             _userHandler = userHandler;
+            _userContext = userContext;
         }
         public Book SearchForBook()
         {
@@ -66,16 +74,37 @@ namespace SmartBook.UI.MenuHandlers
                         }
 
                         else
-                        {
+                        {                          
                             if (index == 0)
                             {
-                                book = _bookHandler.GetBookByTitle(input);
+                                if (_bookHandler.GetBooksByTitle(input).Count > 1)
+                                {
+                                    List<Book> books = _bookHandler.GetBooksByTitle(input);
+                                    book = SelectBook(books, "Böcker med titeln: " + input);
+                                }
+
+                                else
+                                {
+                                    book = _bookHandler.GetBookByTitle(input);
+                                }
+                                   
                                 input = "avbryt";
                             }
 
                             else if (index == 1)
                             {
-                                book = _bookHandler.GetBookByAuthor(input);
+
+                                if (_bookHandler.GetBooksByAuthor(input).Count > 1)
+                                {
+                                    List<Book> books = _bookHandler.GetBooksByAuthor(input);
+                                    book = SelectBook(books, "Böcker med författaren: " + input);
+                                }
+
+                                else
+                                {
+                                    book = _bookHandler.GetBookByAuthor(input);
+                                }
+                                
                                 input = "avbryt";
                             }
 
@@ -100,10 +129,6 @@ namespace SmartBook.UI.MenuHandlers
                             }
 
                         }
-
-
-
-
                     }
 
                     catch
@@ -119,11 +144,43 @@ namespace SmartBook.UI.MenuHandlers
             return (book);
         }
 
+        public Book SelectBook(List<Book> books, string menuTitle)
+        {            
+            string[] bookArray = FormatBooksAsArray(books);
+            int index = 0;
+            index = Menu.Display
+            (
+                menuTitle,
+                bookArray,
+                index
+            );         
+
+            return books[index];
+        }
 
 
         public void AddBook()
-        {
+        {           
+            bool bookIsCreated = false;
 
+            do
+            {
+                string title = AppTools.PromptUserForTextInput("Ange titel för boken: ");
+                string author = AppTools.PromptUserForTextInput("Ange författare för boken: ");
+                BookGenre genre = SelectBookGenre();
+                BookCondition condition = SelectBookCondition();
+                BookStatus status = SelectBookStatus();
+
+                bookIsCreated = _bookHandler.AddBook(status, condition, title, author, genre);
+
+                if (!bookIsCreated)
+                {
+                    Console.WriteLine("Det gick inte att lägga till boken, var vänlig och försök igen.");
+                    AppTools.WaitForEnterKey();
+                }
+
+
+            } while (!bookIsCreated);
         }
 
         public void ViewBook(Book book)
@@ -140,20 +197,73 @@ namespace SmartBook.UI.MenuHandlers
                     (
                         bookView,
                         [
-                            "Hyr",
+                            "Låna",
                             "Redigera",
                             "Ta bort",
                             "Gå tillbaka till förgående meny"
                         ], index
                     );
 
-                if (index == 0)
+                switch (index)
                 {
-                
-                } 
+                    case 0:
+                        LoanBook(book);
+                        break;
+
+                    case 1:
+                        EditBook(book);
+                        break;
+
+                    case 2:
+                        RemoveBook(book.Id);
+                        view = false;
+                        break;
+
+                    case 3:
+                        view = false;                       
+                        break;
+                }
                
 
             } while (view);
+        }
+
+        public void LoanBook(Book book)
+        {
+            User? user = _userContext.SelectedUser;
+
+            if (user != null)
+            {
+                LibraryCard card = _libraryCardHandler.GetLibraryCardByUserId(user.Id);
+
+
+                if (card != null)
+                {
+                    bool loanIsCreated = _loanHandler.CreateLoan(book, user.Id, card.CardNumber);
+
+                    if (loanIsCreated)
+                        Console.WriteLine("Du har lånat " + book.BookInfo.Title + "\nKolla på 'Mina lån för att se mer info.");
+
+                    else
+                        Console.WriteLine("Lånet av boken" + book.BookInfo.Title + " misslyckades, var vänlig och försök igen.");
+
+                    AppTools.WaitForEnterKey();
+                }
+
+                else
+                {
+                    Console.Clear();
+                    Console.WriteLine("För att låna en bok behöver du ett lånekort, var vänlig och skapa ett först.");
+                    AppTools.WaitForEnterKey();
+                }
+            }
+
+            else
+            {
+                Console.Clear();
+                Console.WriteLine("Den valda användaren returnerar null");
+                AppTools.WaitForEnterKey();
+            }
         }
 
         public void EditBook(Book book)
@@ -162,18 +272,149 @@ namespace SmartBook.UI.MenuHandlers
             bool editing = true;
             do
             {
+                string[] arrayOfDetails = BookFormat.FormatDetailsAsArray(book);
+
+                index = Menu.Display
+                    (
+                        book.BookInfo.Title,
+                        arrayOfDetails,
+                        index                                     
+                    );
                 
+                switch (index) 
+                {
+                    case 0:
+                        Console.Clear();
+                        Console.WriteLine("Du kan inte ändra detta värde.");
+                        AppTools.WaitForEnterKey();
+                        break;
+
+                    case 1:
+                        book.BookInfo.SetTitle(AppTools.PromptUserForTextInput("Ange Titel: "));                       
+                        break;
+
+                    case 2:
+                        book.BookInfo.SetAuthor(AppTools.PromptUserForTextInput("Ange Författare: "));
+                        break;
+
+                    case 3:
+                        book.BookInfo.SetGenre(SelectBookGenre());
+                        break;
+
+                    case 4:
+                        book.SetConditon(SelectBookCondition());
+                        break;
+
+                    case 5:
+                        book.SetStatus(SelectBookStatus());
+                        break;
+
+                    case 6:
+                        Console.Clear();
+                        Console.WriteLine("Du kan inte ändra detta värde.");
+                        AppTools.WaitForEnterKey();
+                        break;
+
+                    case 7:
+                        editing = false;
+                        break;
+
+                }
+
+
             } while (editing);
+
+            
         }
 
-        public void RemoveBook()
+        public BookGenre SelectBookGenre()
         {
+            string[] names = Enum.GetNames(typeof(BookGenre));
+            int index = Menu.Display("Ange genre:\n", names, 0);
 
+            var values = Enum.GetValues<BookGenre>();
+
+            if (index < 0 || index >= values.Length)
+                throw new ArgumentOutOfRangeException(nameof(index), "Valt index är ogiltigt.");
+
+            return values[index];
         }
 
-        internal void ListBooks()
+        public BookCondition SelectBookCondition()
         {
-            throw new NotImplementedException();
+            string[] names = Enum.GetNames(typeof(BookCondition));
+            int index = Menu.Display("Ange skick:\n", names, 0);
+
+            var values = Enum.GetValues<BookCondition>();
+
+            if (index < 0 || index >= values.Length)
+                throw new ArgumentOutOfRangeException(nameof(index), "Valt index är ogiltigt.");
+
+            return values[index];
         }
+
+        public BookStatus SelectBookStatus()
+        {
+            string[] names = Enum.GetNames(typeof(BookStatus));
+            int index = Menu.Display("Ange tillgänglighet:\n", names, 0);
+
+            var values = Enum.GetValues<BookStatus>();
+
+            if (index < 0 || index >= values.Length)
+                throw new ArgumentOutOfRangeException(nameof(index), "Valt index är ogiltigt.");
+
+            return values[index];
+        }
+
+        public void RemoveBook(Guid bookId)
+        {
+            _bookHandler.RemoveBook(bookId);
+            Console.WriteLine("Boken har nu tagits bort.");
+            AppTools.WaitForEnterKey();
+        }
+
+        public string[] FormatBooksAsArray(List<Book> books)
+        {
+            int index = 0;
+            string[] booksArray = new string[books.Count];
+            foreach (Book book in books)
+            {
+                booksArray[index++] = BookFormat.FormatRow(book);
+            }
+        
+            return booksArray;
+        }
+
+        public string[] FormatBooksAsArrayWithExitOption(List<Book> books)
+        {
+            int index = 0;
+            string[] booksArray = new string[books.Count + 1];
+            foreach (Book book in books)
+            {
+                booksArray[index++] = BookFormat.FormatRow(book);
+            }
+
+            booksArray[index++] = "Gå tillbaka till förgående meny";
+
+            return booksArray;
+        }
+
+        public void ListBooks()
+        {         
+            List<Book> books = _bookHandler.GetBooks();
+
+            int index = Menu.Display
+                (
+                    "Alla böcker",
+                    FormatBooksAsArrayWithExitOption(books),
+                    0
+                );
+
+            if (index != books.Count + 1)
+            {
+                ViewBook(books[index]);
+            }
+
+        }        
     }
 }

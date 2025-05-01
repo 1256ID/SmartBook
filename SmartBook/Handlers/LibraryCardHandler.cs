@@ -3,19 +3,22 @@ using SmartBook.Enums.Models;
 using SmartBook.Services;
 using SmartBook.Utilities;
 using SmartBook.Data;
+using SmartBook.Session;
 
 namespace SmartBook.Handlers
 {
     public class LibraryCardHandler 
     {
-        private LibraryCardService _libraryCardService;
+        private readonly LibraryCardService _libraryCardService;
+        private readonly UserContext _userContext;
 
-        public LibraryCardHandler(LibraryCardService libraryCardService)
+        public LibraryCardHandler(Services.LibraryCardService libraryCardService, UserContext userContext)
         {
             _libraryCardService = libraryCardService;
+            _userContext = userContext;
         }
 
-        public LibraryCard FindByCardNumber(Guid cardNumber)
+        public LibraryCard GetByCardNumber(Guid cardNumber)
         {
             LibraryCard card = new();
             try
@@ -28,6 +31,30 @@ namespace SmartBook.Handlers
                          );
 
                 card = _libraryCardService.GetByCardNumber(cardNumber);
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+                AppTools.WaitForEnterKey();
+            }
+
+            return card;
+        }
+
+        public LibraryCard GetLibraryCardByUserId(Guid userId)
+        {
+            LibraryCard card = new();
+            try
+            {
+                if (userId == Guid.Empty)
+                    throw new ArgumentException
+                   (
+                       "Guid '" + nameof(userId) + "' är tomt.",
+                       nameof(userId)
+                   );
+
+                card = _libraryCardService.GetLibraryCardByUserId(userId);
             }
 
             catch (Exception ex)
@@ -158,5 +185,7 @@ namespace SmartBook.Handlers
 
             return exists;
         }
+
+        
     }
 }

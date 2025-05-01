@@ -27,6 +27,10 @@ namespace SmartBook.Services
             => LibraryCards.FirstOrDefault(c => c.CardNumber == cardNumber)
             ?? throw new InvalidOperationException("Inget lånekort med angivet " + nameof(cardNumber) + " hittades.");
 
+        public LibraryCard GetLibraryCardByUserId(Guid userId) 
+            => LibraryCards.FirstOrDefault(c => c.Id == userId)
+            ?? throw new InvalidOperationException("Inget lånekort med angivet " + nameof(userId) + " hittades.");
+
         public List<LibraryCard> GetLibraryCards() => _repository.GetLibraryCards();
 
         public void Add(LibraryCard card)
@@ -69,6 +73,8 @@ namespace SmartBook.Services
         {
             return LibraryCards.Exists(c => c.Id.Equals(libraryCardId));
         }
+
+        
 
     }
 }

@@ -2,16 +2,19 @@
 using SmartBook.Enums.Models;
 using SmartBook.Models;
 using SmartBook.Services;
+using SmartBook.Session;
 using SmartBook.Utilities;
 
 namespace SmartBook.Handlers;
 
 public class BookHandler
 {
-    private BookService _bookService;
-    public BookHandler(BookService bookService)
+    private readonly BookService _bookService;
+    private readonly UserContext _userContext;
+    public BookHandler(BookService bookService, UserContext userContext)
     {
         _bookService = bookService;
+        _userContext = userContext;
     }
 
 
@@ -133,41 +136,70 @@ public class BookHandler
         return books;
     }
 
+    public List<Book> GetBooksByTitle(string title)
+    {
+        List<Book> books = [];
+
+        try
+        {
+            if (string.IsNullOrWhiteSpace(title))
+                return new List<Book>();
+            books = _bookService.GetBooksByTitle(title);
+        }
+
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error: " + ex.Message);
+            AppTools.WaitForEnterKey();
+        }
+
+        return books;
+        
+    }
+
+    public List<Book> GetBooksByAuthor(string author)
+    {
+        List<Book> books = [];
+
+        try
+        {
+            if (string.IsNullOrWhiteSpace(author))
+                return new List<Book>();
+            books = _bookService.GetBooksByAuthor(author);
+        }
+
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error: " + ex.Message);
+            AppTools.WaitForEnterKey();
+        }
+
+        return books;
+    }
+
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
     ////////////////////////////////////////////////     Other methods     ////////////////////////////////////////////////
 
-    public bool AddBook(BookStatus status, BookCondition condition, Guid isbn, string title, string author, BookGenre genre)
+    public bool AddBook(BookStatus status, BookCondition condition, string title, string author, BookGenre genre)
     {
         bool bookHasBeenAdded = false;
 
         try
         {
-            if (isbn == Guid.Empty)
-                throw new ArgumentException
-                (
-                    "Guid '" + nameof(isbn) + "' är tomt.",
-                    nameof(isbn)
-                );
+            if (string.IsNullOrWhiteSpace(title))
+                throw new ArgumentException(nameof(title) + " är tomt eller null", title);
 
-            BookInfo bookInfo;
+            if (string.IsNullOrWhiteSpace(author))
+                throw new ArgumentException(nameof(author) + " är tomt eller null", author);
 
-            if (_bookService.BookExists(isbn))
-            {
-                bookInfo = _bookService.GetBookInfoByISBN(isbn);
-            }
-
-            else
-            {
-                bookInfo = new(isbn, title, author);
-                bookInfo.SetGenre(genre);
-            }
-
+            BookInfo bookInfo = new(title, author);
+            bookInfo.SetGenre(genre);
             Book book = new(bookInfo);
-            book.ValidateStatus(status);
-            book.ValidateConditon(condition);
+            book.SetStatus(status);
+            book.SetConditon(condition);
 
             _bookService.Add(book);
             bookHasBeenAdded = true;

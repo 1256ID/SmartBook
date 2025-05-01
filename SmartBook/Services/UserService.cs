@@ -25,15 +25,24 @@ public class UserService
 
     public List<User> GetUsers() => _repository.GetUsers();
 
+    public void AddUser(User user)
+    {
+        _repository.Add(user);
+    }
+
+    public void Remove(User user)
+    {
+        throw new NotImplementedException();
+    }
+
+    // Övriga metoder
+
     public bool Exists(Guid guid)
     {
         return GetUsers().Any(c => c.Id == guid);
     }
 
-    public bool UserHasLibraryCard(Guid userId)
-    {
-        return _repository.GetLibraryCards().Any(c => c.Id == userId);
-    }
+   
 
 
     public bool AnyUserExists()
@@ -41,10 +50,7 @@ public class UserService
         return GetUsers().Count != 0;
     }
 
-    internal void Remove(User user)
-    {
-        throw new NotImplementedException();
-    }
+    
 
 }
 

@@ -10,7 +10,7 @@ namespace SmartBook.Models;
 public class BookInfo
 {
     public Guid Id { get; } = Guid.NewGuid();
-    public Guid ISBN { get; private set; }
+    public Guid ISBN { get; private set; } = Guid.NewGuid();
     public string Title { get; private set; }
     public string Author { get; private set; }
     public BookGenre Genre { get; private set; }
@@ -19,13 +19,11 @@ public class BookInfo
     {
 
     }
-    public BookInfo(Guid isbn, string title, string author)
+    public BookInfo(string title, string author)
     {
-        ValidateISBN(isbn);
         ValidateTitle(title);
         ValidateAuthor(author);
-        
-        ISBN = isbn;
+               
         Title = title;
         Author = author;
     }
@@ -52,13 +50,7 @@ public class BookInfo
 
     //////////////////////////////////      Validerings metoder      //////////////////////////////////
 
-    public void ValidateISBN(Guid isbn)
-    {      
-        if (isbn == Guid.Empty)                  
-            throw new ArgumentException("ISBN numret är tomt.", nameof(isbn));                                      
-    }
-
-    public void ValidateTitle(string title)
+    private void ValidateTitle(string title)
     {
         if (string.IsNullOrWhiteSpace(title))
             throw new ArgumentException("Titel är null eller tom.", nameof(title));
@@ -70,13 +62,13 @@ public class BookInfo
             throw new ArgumentException("Den angivna titeln innehåller ogiltiga tecken.", nameof(title));
 
     }
-    public void ValidateAuthor(string author)
+    private void ValidateAuthor(string author)
     {      
         if (string.IsNullOrWhiteSpace(author))
             throw new ArgumentException("Författare är null eller tom.", nameof(author));
-    }   
+    }
 
-    public void ValidateGenre(BookGenre genre)
+    private void ValidateGenre(BookGenre genre)
     {
         if (!Enum.IsDefined(genre))
             throw new ArgumentException("Bokstatus innehåller felaktivt format.", nameof(genre));

@@ -5,6 +5,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using SmartBook.Handlers;
+using SmartBook.Session;
 using SmartBook.UI.MenuHandlers;
 
 
@@ -17,17 +18,20 @@ public class MenuManager
     private readonly LibraryCardHandler _libraryCardHandler;
     private readonly LoanHandler _loanHandler;
     private readonly UserHandler _userHandler;
+
+    private readonly UserContext _userContext;
     
-    public MenuManager(BookHandler bookHandler, LibraryCardHandler libraryCardHandler, LoanHandler loanHandler, UserHandler userHandler)
+    public MenuManager(BookHandler bookHandler, LibraryCardHandler libraryCardHandler, LoanHandler loanHandler, UserHandler userHandler, UserContext userContext)
     {
         _bookHandler = bookHandler;
         _libraryCardHandler = libraryCardHandler;
         _loanHandler = loanHandler;
         _userHandler = userHandler;
+        _userContext = userContext;
     }
     public void ManageBooks() 
     {
-        BookMenuHandler bookMenuHandler = new(_bookHandler, _libraryCardHandler, _loanHandler, _userHandler);
+        BookMenuHandler bookMenuHandler = new(_bookHandler, _libraryCardHandler, _loanHandler, _userHandler, _userContext);
         bool managingBooks = true;
         int index = 0;
 

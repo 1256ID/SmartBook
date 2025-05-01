@@ -56,7 +56,8 @@ public static class BookFormat
             "Genre: " +             book.BookInfo.Genre,
             "Skick: " +             condition,
             "Tillgänglighet: " +    status,
-            "Tillagt datum: " +     book.AddedDate.ToString()
+            "Tillagt datum: " +     book.AddedDate.ToString(),
+            "Gå tillbaka till förgående meny"
         ];
 
         return outputArray;

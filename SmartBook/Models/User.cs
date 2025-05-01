@@ -39,7 +39,7 @@ public class User
         Email = email;
     }
 
-    public void ValidateName(string name)
+    private void ValidateName(string name)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace("Det angivna namnet är tomt eller null.", nameof(name));
 
@@ -53,7 +53,7 @@ public class User
             throw new ArgumentException("Det angivna namnet innehåller ogiltiga tecken.", nameof(name));        
     }
 
-    public string ValidateEmail(string email)
+    private string ValidateEmail(string email)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace("Den angivna mailadressen är tomt eller null.", nameof(email));    
 

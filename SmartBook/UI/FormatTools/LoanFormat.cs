@@ -5,16 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using SmartBook.Enums.Models;
 using SmartBook.Models;
-using SmartBook.Services;
+using SmartBook.Handlers;
 
 namespace SmartBook.UI.FormatTools;
 
 public class LoanFormat
-{
-    private readonly UserService _userService = new();
-    private readonly BookService _bookService = new();
-    private readonly LibraryCardService _libraryCardService = new();
-
+{      
     public static string GetHeader()
     {
         // ISBN, Titel, Hyrd av (namn), Lånekortsnummer:, Utlånatdatum:, Inlämningsdatum: Returdatum:,
@@ -31,11 +27,13 @@ public class LoanFormat
         return header;
     }
 
-    public string FormatDetailsAsString(Loan loan)
+    public string FormatDetailsAsString(Loan loan, string userName, string bookTitle, Guid cardNumber)
     {
-        var user = _userService.GetUser(loan.UserId);
-        var book = _bookService.GetBookByISBN(loan.ISBN);
-        var card = _libraryCardService.FindByCardNumber(loan.CardNumber);
+        /*
+        var user = _userHandler.GetUser(loan.UserId);
+        var book = _bookHandler.GetBookByISBN(loan.ISBN);
+        var card = _libraryCardHandler.GetByCardNumber(loan.CardNumber);
+        */
 
         string returnDate = 
             loan.ReturnDate.HasValue ?
@@ -45,9 +43,9 @@ public class LoanFormat
         string outputArray =
 
             "\nISBN: " +                loan.ISBN.ToString() +
-            "\nTitel: " +               book.BookInfo.Title +
-            "\nHyrd av: " +             user.Name +
-            "\nLånekortsnummer: " +     card.CardNumber.ToString() +
+            "\nTitel: " +               bookTitle +
+            "\nHyrd av: " +             userName +
+            "\nLånekortsnummer: " +     cardNumber.ToString() +
             "\nUtlånatdatum: " +        loan.LoanDate.ToString("yyyy-MM-dd") +
             "\nInlämningsdatum: " +     loan.DueDate.ToString("yyyy-MM-dd") +
             "\nReturdatum: " +          returnDate;
@@ -57,6 +55,7 @@ public class LoanFormat
 
     public string[] FormatDetailsAsArray(LibraryCard card)
     {
+
         string status = LibraryCardStatusExtensions.GetSwedishName(card.Status);
 
         string[] outputArray =
@@ -64,16 +63,19 @@ public class LoanFormat
             "Kort nummer: " +           card.CardNumber.ToString(),
             "Utfärdsdatum: " +          card.IssuedDate.ToString("yyyy-MM-dd"),
             "Utgångsdatum: " +          card.ExpiryDate.ToString("yyyy-MM-dd"),
-            "Lånekortsstatus: " +       status
+            "Lånekortsstatus: " +       status,
+            "Gå tillbaka till förgående meny"
         ];
 
         return outputArray;
     }
 
-    public string FormatRow(Loan loan)
+    public string FormatRow(Loan loan, User user, Book book)
     {
-        var user = _userService.GetUser(loan.UserId);
-        var book = _bookService.GetBookByISBN(loan.ISBN);
+        /*
+        var user = _userHandler.GetUser(loan.UserId);
+        var book = _bookHandler.GetBookByISBN(loan.ISBN);
+        */
 
         string output = string.Format
         (

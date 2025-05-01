@@ -27,5 +27,45 @@ namespace SmartBook.Utilities
 
             }
         }
+
+        public static string PromptUserForTextInput(string variableName)
+        {
+            string output = "";
+            bool waitingForCorrectInput = true;
+
+            while (waitingForCorrectInput)
+            {
+                try
+                {
+                    Console.Clear();
+                    Console.Write(variableName);
+                    string ? input = Console.ReadLine();
+                    if (string.IsNullOrEmpty(input))
+                    {
+                        Console.WriteLine("Inmatningen får inte vara tom.\n\n");
+                        AppTools.WaitForEnterKey();
+                    }
+
+                    else
+                    {
+                        if (input != null)
+                        {
+                            output = input;
+                        }
+
+                        waitingForCorrectInput = false;
+                    }
+                }
+
+                catch
+                {
+                    Console.WriteLine("Ogiltig inmatning\n\n");
+                    AppTools.WaitForEnterKey();
+                }
+            }
+
+            return output;
+
+        }
     }
 }

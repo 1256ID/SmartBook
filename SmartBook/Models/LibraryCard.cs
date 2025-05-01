@@ -31,7 +31,7 @@ public class LibraryCard
         Status = status;        
     }
 
-    public void ValidateStatus(LibraryCardStatus status)
+    private void ValidateStatus(LibraryCardStatus status)
     {
         if (!Enum.IsDefined(status))
             throw new ArgumentException("Lånekorts status innehåller ogiltigt format.", nameof(status));

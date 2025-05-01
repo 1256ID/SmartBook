@@ -37,13 +37,13 @@ public class Book
         Condition = condition;
     }
 
-    public void ValidateStatus(BookStatus status)
+    private void ValidateStatus(BookStatus status)
     {
         if (!Enum.IsDefined(status))
             throw new ArgumentException("Bokstatus innehåller felaktivt format.", nameof(status));  
     }
 
-    public void ValidateConditon(BookCondition condition)
+    private void ValidateConditon(BookCondition condition)
     {
         if (!Enum.IsDefined(condition))
             throw new ArgumentException("Bokskick innehåller felaktivt format.", nameof(condition));       
