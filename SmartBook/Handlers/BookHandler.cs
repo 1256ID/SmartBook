@@ -9,8 +9,6 @@ namespace SmartBook.Handlers;
 public class BookHandler
 {
     private BookService _bookService;
-    private List<Book> Books => _bookService.GetAllBooks();
-
     public BookHandler(BookService bookService)
     {
         _bookService = bookService;
@@ -117,7 +115,23 @@ public class BookHandler
     }
 
 
-    public List<Book> GetAllBooks() => _bookService.GetAllBooks();
+    public List<Book> GetBooks()
+    {
+        List<Book> books = [];
+
+        try
+        {
+            books = _bookService.GetBooks();
+        }
+
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error: " + ex.Message);
+            AppTools.WaitForEnterKey();
+        }
+
+        return books;
+    }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

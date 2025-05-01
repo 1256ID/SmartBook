@@ -37,19 +37,19 @@ namespace SmartBook.Services
            => _repository.GetBooks().FirstOrDefault(c => c.BookInfo.ISBN.Equals(isbn))
            ?? throw new InvalidOperationException("Ingen bok med angivet " + nameof(isbn) + " hittades.");
 
-        public List<Book> GetAllBooks() => _repository.GetBooks();
+        public List<Book> GetBooks() => _repository.GetBooks();
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
         ////////////////////////////////////////////////     Other methods     ////////////////////////////////////////////////
 
-        public void Add(Book book) => Books.Add(book);
+        public void Add(Book book) => _repository.Add(book);
 
         public void Edit(Book book)
         {
             var targetBook
-                = Books.FirstOrDefault(c => c.Id.Equals(book.Id))
+                = _repository.GetBooks().FirstOrDefault(c => c.Id.Equals(book.Id))
                 ?? throw new ArgumentNullException
                     (
                         nameof(book),
@@ -75,20 +75,21 @@ namespace SmartBook.Services
         public void Remove(Guid isbn)
         {
             var targetBook
-                = Books.FirstOrDefault(c => c.Id.Equals(isbn))
+                = _repository.GetBooks().FirstOrDefault(c => c.Id.Equals(isbn))
                 ?? throw new ArgumentNullException
                     (
                         nameof(isbn),
             bookIsNull
                     );
 
-            Books.Remove(targetBook);
+            _repository.Remove(targetBook);
         }
 
         public bool BookExists(Guid isbn)
         {
-            return Books.Exists(c => c.BookInfo.ISBN.Equals(isbn));
+            return _repository.GetBooks().Exists(c => c.BookInfo.ISBN.Equals(isbn));
         }
+      
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -97,7 +98,7 @@ namespace SmartBook.Services
         public BookInfo GetBookInfoByISBN(Guid isbn)
         {
             var bookInfo
-                = Books.FirstOrDefault(c => c.BookInfo.ISBN.Equals(isbn))
+                = _repository.GetBooks().FirstOrDefault(c => c.BookInfo.ISBN.Equals(isbn))
                 ?? throw new ArgumentNullException
                     (
                         nameof(isbn),

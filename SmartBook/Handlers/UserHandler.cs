@@ -43,7 +43,23 @@ namespace SmartBook.Handlers
             return user;
         }
 
-        public List<User> GetAllUsers() => _userService.GetAllUsers();
+        public List<User> GetUsers()
+        {
+            List<User> users = [];
+
+            try
+            {
+                users = _userService.GetUsers();
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+                AppTools.WaitForEnterKey();
+            }
+
+            return users;
+        }
 
         public bool AddUser()
         {
@@ -61,9 +77,21 @@ namespace SmartBook.Handlers
             return wasEdited;
         }
 
-        public bool RemoveUser()
+        public bool RemoveUser(User user)
         {
             bool isRemoved = false;
+
+            try
+            {
+                ArgumentNullException.ThrowIfNull(user, nameof(user));
+                _userService.Remove(user);
+            }
+
+            catch (Exception ex) 
+            {
+                Console.WriteLine("Error: " + ex.Message);
+                AppTools.WaitForEnterKey();
+            }
 
 
             return isRemoved;
@@ -92,6 +120,31 @@ namespace SmartBook.Handlers
 
             return exists;
 
+        }
+
+        public bool UserHasLibraryCard(Guid userId)
+        {
+            bool hasLibraryCard = false;
+
+            try
+            {
+                if (userId == Guid.Empty)
+                    throw new ArgumentException
+                   (
+                       "Guid '" + nameof(userId) + "' är tomt.",
+                       nameof(userId)
+                   );
+
+                hasLibraryCard = _userService.UserHasLibraryCard(userId);
+            }
+
+            catch (Exception ex) 
+            {
+                Console.WriteLine("Error: " + ex.Message);
+                AppTools.WaitForEnterKey();
+            }
+
+            return hasLibraryCard;
         }
 
         public bool AnyUserExists()

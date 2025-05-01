@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 using SmartBook.Models;
@@ -43,6 +44,49 @@ namespace SmartBook.Handlers
 
             return loan;
         }
+
+        public List<Loan> GetLoans()
+        {
+            List<Loan> loans = [];
+            try
+            {
+                loans = _loanService.GetLoans();
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                AppTools.WaitForEnterKey();
+            }
+
+            return loans;
+        }
+
+        public bool CreateLoan(Book book, Guid userId)
+        {
+            bool loanIsCreated = false;      
+
+            try
+            {
+                ArgumentNullException.ThrowIfNull(book, nameof(book) + " returnerade null.");
+                if (userId == Guid.Empty)
+                    throw new ArgumentException("Guid '" + nameof(userId) + "' är tomt.", nameof(userId));
+
+                
+                Loan loan = new(book.BookInfo.ISBN,);
+                loanIsCreated = _loanService.Add(loan); 
+            }
+
+            catch (Exception ex) 
+            {
+                Console.WriteLine("Error: " + ex.Message);
+                AppTools.WaitForEnterKey();
+            }
+
+            return loanIsCreated;
+        }
+
+        
 
     }
 }

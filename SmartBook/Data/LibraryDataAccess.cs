@@ -30,24 +30,27 @@ namespace SmartBook.Data
 
         // Alla GET metoder
 
-        public List<Book> GetAllBooks()
+        public List<Book> GetBooks()
         {
-            return _library.Books ?? throw new ArgumentNullException("Books", "Listan med böcker är null.");
+            return _library.Books ?? new List<Book>();
         }
 
-        public List<LibraryCard> GetAllLibraryCards()
+        public List<LibraryCard> GetLibraryCards()
         {
-            return _library.Cards ?? throw new ArgumentNullException("LibraryCards", "Listan med lånekort är null.");
+            return _library.Cards ?? new List<LibraryCard>();
         }
 
-        public List<Loan> GetAllLoans()
+        public List<Loan> GetLoans()
         {
-            return _library.Loans ?? throw new ArgumentNullException("Loans", "Listan med boklån är null.");
+            return _library.Loans ?? new List<Loan>();
         }
 
-        public List<User> GetAllUsers()
+        public List<User> GetUsers()
         {
-            return _library.Users ?? throw new ArgumentNullException("Users", "Listan med användare är null.");
-        }          
+            return _library.Users ?? new List<User>();
+        }
+
+
+       
     }
 }

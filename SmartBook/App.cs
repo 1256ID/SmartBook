@@ -15,7 +15,7 @@ public class App
 
     
     
-    static void Run()
+    static void Main()
     {
         // Load in Database
 
@@ -43,11 +43,12 @@ public class App
         var userService = new UserService(repository);
         var userHandler = new UserHandler(userService);
 
+        MenuManager menuManager = new(bookHandler, libraryCardHandler, loanHandler, userHandler);
 
         // Starting variables
 
-        MenuManager menuManager = new();
-        
+
+
         bool runningApp = true;
         int index = 0;
 

@@ -4,15 +4,30 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using SmartBook.Handlers;
+using SmartBook.UI.MenuHandlers;
 
 
 namespace SmartBook.UI;
 
 public class MenuManager
 {
+
+    private readonly BookHandler _bookHandler;
+    private readonly LibraryCardHandler _libraryCardHandler;
+    private readonly LoanHandler _loanHandler;
+    private readonly UserHandler _userHandler;
+    
+    public MenuManager(BookHandler bookHandler, LibraryCardHandler libraryCardHandler, LoanHandler loanHandler, UserHandler userHandler)
+    {
+        _bookHandler = bookHandler;
+        _libraryCardHandler = libraryCardHandler;
+        _loanHandler = loanHandler;
+        _userHandler = userHandler;
+    }
     public void ManageBooks() 
     {
-        MenuActionHandler menuActionHandler = new();
+        BookMenuHandler bookMenuHandler = new(_bookHandler, _libraryCardHandler, _loanHandler, _userHandler);
         bool managingBooks = true;
         int index = 0;
 
@@ -24,7 +39,7 @@ public class MenuManager
                     [
                         "Sök",
                         "Lägg till",
-                        "Redigera",                        
+                        "Visa boklista",                        
                         "Gå tillbaka till förgående meny"
                     ], index
                 );
@@ -32,16 +47,16 @@ public class MenuManager
             switch (index)
             {
                 case 0:
-                    menuActionHandler.SearchForBook();
+                    bookMenuHandler.SearchForBook();
                 break;
                     
                 case 1:
-                    menuActionHandler.AddBook();
+                    bookMenuHandler.AddBook();
                 break;
 
                 case 2:
-
-                break;
+                    bookMenuHandler.ListBooks();
+                    break;
 
                 case 3:
                     managingBooks = false;

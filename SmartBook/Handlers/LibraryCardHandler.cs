@@ -2,6 +2,7 @@
 using SmartBook.Enums.Models;
 using SmartBook.Services;
 using SmartBook.Utilities;
+using SmartBook.Data;
 
 namespace SmartBook.Handlers
 {
@@ -36,6 +37,24 @@ namespace SmartBook.Handlers
             }
 
             return card;
+        }
+
+        public List<LibraryCard> GetLibraryCards()
+        {
+            List<LibraryCard> cards = [];
+
+            try
+            {
+                cards = _libraryCardService.GetLibraryCards();
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+                AppTools.WaitForEnterKey();
+            }
+
+            return cards;
         }
         public bool CreateLibraryCard(Guid userId)
         {

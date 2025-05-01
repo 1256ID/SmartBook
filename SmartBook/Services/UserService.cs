@@ -18,21 +18,34 @@ public class UserService
     {
         _repository = repository;
     }
-    private List<User> Users => _repository.GetUsers();
 
     public User GetUser(Guid userId)
-        => Users.FirstOrDefault(c => c.Id == userId)
+        => GetUsers().FirstOrDefault(c => c.Id == userId)
         ?? throw new InvalidOperationException("Ingen användare med angivet " + nameof(userId) + " hittades.");
 
-    public List<User> GetAllUsers() => Users;
+    public List<User> GetUsers() => _repository.GetUsers();
 
     public bool Exists(Guid guid)
     {
-        return Users.Any(c => c.Id == guid);
+        return GetUsers().Any(c => c.Id == guid);
     }
+
+    public bool UserHasLibraryCard(Guid userId)
+    {
+        return _repository.GetLibraryCards().Any(c => c.Id == userId);
+    }
+
 
     public bool AnyUserExists()
     {
-        return Users.Count != 0;
+        return GetUsers().Count != 0;
     }
+
+    internal void Remove(User user)
+    {
+        throw new NotImplementedException();
+    }
+
 }
+
+   

@@ -27,6 +27,8 @@ namespace SmartBook.Services
             => LibraryCards.FirstOrDefault(c => c.CardNumber == cardNumber)
             ?? throw new InvalidOperationException("Inget lånekort med angivet " + nameof(cardNumber) + " hittades.");
 
+        public List<LibraryCard> GetLibraryCards() => _repository.GetLibraryCards();
+
         public void Add(LibraryCard card)
         {
             LibraryCards.Add(card);

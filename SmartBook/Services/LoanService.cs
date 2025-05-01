@@ -18,9 +18,16 @@ namespace SmartBook.Services
             _repository = repository;
         }
 
-        private List<Loan> loans => _repository.GetLoans();
         public Loan GetLoan(Guid loanId)
-            => loans.FirstOrDefault(c => c.Id == loanId)
+            => GetLoans().FirstOrDefault(c => c.Id == loanId)
             ?? throw new InvalidOperationException("Inget boklån med angivet " + nameof(loanId) + " hittades.");
+        public List<Loan> GetLoans() => _repository.GetLoans();
+
+        
+        public bool Add(Loan loan)
+        {
+            _repository.Add(loan);
+            return true;
+        }
     }
 }

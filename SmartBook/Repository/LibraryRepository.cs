@@ -13,124 +13,33 @@ namespace SmartBook.Repository
     public class LibraryRepository
     {
         private LibraryDataAccess _libraryDataAccess;
+        private Library _library;
 
         public LibraryRepository(LibraryDataAccess libraryDataAccess)
         {
             _libraryDataAccess = libraryDataAccess;
+            _library = _libraryDataAccess.GetLibrary();
         }
 
-        public LibraryRepository()
-        {
+        // Alla GET metoder
 
-        }
+        public List<Book> GetBooks() => _library.Books;
+        public List<LibraryCard> GetLibraryCards() => _library.Cards;
+        public List<Loan> GetLoans() => _library.Loans;    
+        public List<User> GetUsers() => _library.Users;
 
-        public List<Book> GetBooks()
-        {
-            List<Book> bookList = [];
+        // Alla ADD metoder
 
-            try
-            {
-                bookList = _libraryDataAccess.GetAllBooks();
-            }
+        public void Add(Book book) => _library.Books.Add(book);
+        public void Add(LibraryCard card) => _library.Cards.Add(card);
+        public void Add(Loan loan) => _library.Loans.Add(loan);
+        public void Add(User user) => _library.Users.Add(user);
 
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error: " + ex.Message);
-                AppTools.WaitForEnterKey();
-            }
+        // Alla REMOVE metoder
 
-            return bookList;
-        }
-
-        public List<LibraryCard> GetLibraryCards()
-        {
-            List<LibraryCard> libraryCardList = [];
-
-            try
-            {
-                libraryCardList = _libraryDataAccess.GetAllLibraryCards();
-            }
-
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error: " + ex.Message);
-                AppTools.WaitForEnterKey();
-            }
-
-            return libraryCardList;
-
-        }
-
-        public List<Loan> GetLoans()
-        {
-            List<Loan> loanList = [];
-
-            try
-            {
-                loanList = _libraryDataAccess.GetAllLoans();
-            }
-
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error: " + ex.Message);
-                AppTools.WaitForEnterKey();
-            }
-
-            return loanList;
-        }
-
-        public List<User> GetUsers()
-        {
-            List<User> userList = [];
-
-            try
-            {
-                userList = _libraryDataAccess.GetAllUsers();
-            }
-
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error: " + ex.Message);
-                AppTools.WaitForEnterKey();
-            }
-
-            return userList;
-        }
-
-        public bool InitializeDataBase()
-        {
-            bool initializedDatabase = false;
-            try
-            {
-                _libraryDataAccess.InitializeDB();
-                initializedDatabase = true;
-            }
-
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error: " + ex.Message);
-                AppTools.WaitForEnterKey();
-            }
-
-            return initializedDatabase;
-        }       
-
-        public bool SaveDataBase()
-        {
-            bool databaseSavedSuccessfully = false;
-            try
-            {
-                _libraryDataAccess.SaveToDB();
-                databaseSavedSuccessfully = true;
-            }
-
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error: " + ex.Message);
-                AppTools.WaitForEnterKey();
-            }
-
-            return databaseSavedSuccessfully;
-        }
+        public void Remove(Book book) => _library.Books.Remove(book);
+        public void Remove(LibraryCard card) => _library.Cards.Remove(card);
+        public void Remove(Loan loan) => _library.Loans.Remove(loan);
+        public void Remove(User user) => _library.Users.Remove(user);  
     }
 }
